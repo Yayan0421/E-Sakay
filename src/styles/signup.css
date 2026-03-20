@@ -1,0 +1,37 @@
+.signup-page{ min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:40px; background:linear-gradient(180deg,#00c66a 0%,#00d27a 100%); }
+.signup-inner{ width:100%; max-width:1000px; display:flex; gap:0; align-items:center; justify-content:center; margin:0 auto }
+.signup-box{ width:100%; max-width:1000px; margin:100px auto 0; display:flex; border-radius:20px; overflow:hidden; background:#fff; border:2px solid rgba(0,0,0,0.9); box-shadow:0 20px 50px rgba(0,0,0,0.08); }
+.signup-left{ flex:1 1 auto }
+.signup-left .illustration{ height:480px; background:linear-gradient(180deg,#e7f9e9,#dff6e6); display:flex; align-items:center; justify-content:center; overflow:hidden; padding:0 }
+.illustration-container{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:0; overflow:hidden; padding:0; box-sizing:border-box; background:linear-gradient(180deg,#f8fff9,#ffffff); box-shadow:none; }
+.signup-illustration{ width:auto; height:100%; max-width:none; object-fit:contain; transform: scale(0.92); transform-origin: center; }
+.signup-card{ background:transparent; border-radius:0; padding:28px; box-shadow:none; border:none; flex:0 0 380px; }
+.signup-card:hover{ transform:none; box-shadow:none }
+.signup-card-inner{ max-width:320px; margin:0; transform:none; }
+.signup-card .brand, .signup-card-inner .brand { color:#2b7a3a; font-weight:900; margin-bottom:8px; font-size:25px; letter-spacing:0.4px }
+.signup-title{ font-size:30px; margin:0 0 12px; color:#184d2a }
+.signup-form .field{ display:block; margin:0 5px 20px }
+.signup-form input{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e6e6e6 }
+.btn-primary.full{ width:100%; padding:10px 12px; border-radius:999px; background:linear-gradient(180deg,#6fdb6a,#4cc65a); border:none; color:#06331a; font-weight:800; cursor:pointer; margin-top:8px }
+.signup-footer{ font-size:12px; color:#7b8a83; margin-top:12px }
+.signup-login{ margin-top:8px; text-align:center }
+.signup-login a{ color:#2b7a3a; font-weight:700 }
+
+.signup-terms{ display:flex; align-items:flex-start; gap:10px; margin-top:12px; font-size:12px; color:#7b8a83 }
+.signup-terms input[type="checkbox"]{ width:16px; height:16px; margin-top:3px }
+.signup-terms a{ color:#2b7a3a; font-weight:700 }
+
+@media (max-width:900px){
+  .signup-inner{ flex-direction:column; }
+  .signup-box{ flex-direction:column }
+  .signup-left .illustration{ height:240px }
+  .signup-card{ border-radius:14px; flex:0 0 auto; padding:18px }
+}
+
+/* Back button in the upper-left */
+.signup-back{ position:fixed; top:18px; left:18px; background:#ffffffcc; border:1px solid rgba(0,0,0,0.12); padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; color:#083319; box-shadow:0 6px 18px rgba(3,60,30,0.08); z-index:1000 }
+.signup-back:hover{ background:#fff }
+
+@media (max-width:700px){
+  .signup-back{ top:12px; left:12px; padding:6px 10px; font-size:14px }
+}

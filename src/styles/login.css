@@ -1,0 +1,24 @@
+.login-page{ display:flex; align-items:center; justify-content:center; min-height:100vh; padding:40px; background: #00c66a }
+.login-card{ width:520px; background:#fff; padding:36px 44px; border-radius:22px; box-shadow:0 22px 48px rgba(3,60,30,0.08); text-align:center }
+.card-shadow{ box-shadow: 0 18px 40px rgba(3,60,30,0.06); }
+.login-title{ margin:0 0 8px; font-size:26px }
+.login-sub{ margin:0 0 22px; color:#6b7780; font-size:15px }
+.login-logo{ display:block; width:84px; height:auto; margin:0 auto 12px }
+.login-form .field{ position:relative; display:block; margin:12px 40px 15px 15px }
+.login-form input{ width:100%; padding:16px 16px; border-radius:12px; border:1px solid #e6e6e6; font-size:15px }
+.email-field .field-icon{ display:none }
+.pass-field .hide-toggle{ position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:transparent; color:#6b7780; cursor:pointer; font-size:13px }
+.help-text{ text-align:left; color:#6b7780; font-size:13px; margin-top:6px }
+.actions{ margin-top:16px }
+.btn-primary.large{ width:100%; padding:16px 20px; border-radius:12px; font-weight:900; background: linear-gradient(180deg,#00c66a); border:none; color:#2b2b2b; font-size:16px }
+.divider{ margin:18px 0; display:flex; align-items:center; gap:12px; color:#8b8b8b; font-size:13px }
+.divider::before, .divider::after{ content:''; flex:1; height:1px; background:#eee }
+.socials{ display:flex; gap:10px; justify-content:center }
+.social-btn{ background:#fff; border:1px solid #e6e6e6; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700 }
+.signup-cta{ margin-top:12px; color:#6b7780; font-size:13px }
+.signup-cta a{ color:#184d2a; font-weight:700 }
+
+@media (max-width:900px){
+	.login-card{ width:100%; margin:20px; padding:24px }
+	.login-title{ font-size:20px }
+}

@@ -1,0 +1,43 @@
+.rides-page{
+  padding: 28px;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #0f172a;
+}
+.rides-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+.rides-title{font-weight:800; font-size:22px}
+.rides-filters{display:flex; gap:8px; align-items:center}
+.pill{padding:9px 14px; border-radius:999px; background:#fff; border:1px solid #e6eef6; cursor:pointer}
+.pill.active{background:#0ea5a4; color:#fff; border-color:transparent}
+.rides-card{display:flex; gap:20px; background:#fff; border-radius:12px; padding:24px; box-shadow:0 6px 18px rgba(12,30,60,0.06); position:relative}
+.left-col{width:340px}
+.driver-box{display:flex; gap:12px; align-items:flex-start}
+.driver-avatar{width:96px; height:96px; border-radius:10px; background:#f3f7fb; display:flex; align-items:center; justify-content:center; font-weight:700}
+.driver-info strong{display:block}
+.meta-row{display:flex; gap:12px; margin-top:12px}
+.meta-item{background:#f8fafc; padding:10px; border-radius:8px; flex:1; text-align:center}
+.right-col{flex:1}
+.fare-box{display:flex; justify-content:space-between; align-items:flex-start}
+.total-fare{font-size:24px; font-weight:900; color:#0b1220}
+.transaction{margin-top:14px; background:#fbfdff; padding:14px; border-radius:8px; border:1px solid #eef2f7}
+.transaction-row{display:flex; justify-content:space-between; margin-bottom:8px}
+.small{font-size:13px; color:#6b7280}
+.hide-btn{background:#fff; border:1px solid #fde68a; padding:8px 12px; border-radius:8px; cursor:pointer}
+.feedback-btn{background:#ff8c42; color:#fff; padding:8px 12px; border-radius:8px; border:none; cursor:pointer}
+.bike-image{width:100%; height:180px; background:#eef2f8; border-radius:8px; margin-top:12px}
+
+/* subtle top accent bar */
+.rides-card:before{
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 12px;
+  height: 6px;
+  background: linear-gradient(90deg,#ffd166,#ffb84d);
+  border-radius: 6px;
+}
