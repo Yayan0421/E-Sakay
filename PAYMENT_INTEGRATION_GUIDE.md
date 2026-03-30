@@ -233,11 +233,7 @@ PayMongo sends webhooks to confirm payments. For local testing:
 
 ## 8. **Environment Variables (Already Set)**
 
-Your `.env` now has:
-```
-PAYMONGO_PUBLIC_KEY=pk_test_mwPRVQKMfsmkAsu33Lvwbg2u
-PAYMONGO_SECRET_KEY=sk_test_XpAedV4RiJ8UpQvpGKMS6FAM
-```
+Your `.env` now has PayMongo credentials configured in backend/.env
 
 ---
 
