@@ -12,9 +12,33 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 4001;
 
+const configuredOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = Array.from(new Set([
+  'http://localhost:4000',
+  'http://localhost:5173',
+  ...configuredOrigins
+]));
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  return origin.endsWith('.netlify.app');
+};
+
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:4000',
+  origin(origin, callback) {
+    if (isAllowedOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -41,6 +65,6 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`📡 CORS enabled for http://localhost:4000`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`📡 CORS enabled for: ${allowedOrigins.join(', ')}${configuredOrigins.length === 0 ? ', *.netlify.app' : ''}`);
 });

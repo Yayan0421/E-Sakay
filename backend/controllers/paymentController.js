@@ -3,7 +3,7 @@ const paymentModel = require('../models/paymentModel');
 
 const PAYMONGO_API_URL = 'https://api.paymongo.com/v1';
 const PAYMONGO_SECRET_KEY = process.env.PAYMONGO_SECRET_KEY;
-const FRONTEND_URL = 'http://localhost:4000';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4000';
 
 // Helper function to encode PayMongo credentials
 const getAuthHeader = () => {
