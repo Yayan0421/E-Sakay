@@ -1,0 +1,405 @@
+/* === TRANSACTIONS PAGE === */
+
+.transactions-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: calc(100% - 300px);
+  max-width: 100%;
+  min-width: 0;
+  animation: slideIn 0.3s ease-in-out;
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease-in-out;
+  margin-left: 300px;
+}
+
+.transactions-wrapper.sidebar-collapsed {
+  width: calc(100% - 96px);
+  margin-left: 96px;
+}
+
+.transactions-wrapper.sidebar-expanded {
+  width: calc(100% - 300px);
+  margin-left: 300px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Header */
+.transactions-header {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  width: 100%;
+  min-width: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.transactions-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.transactions-header p {
+  margin: 0;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+/* Empty State */
+.transactions-empty {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 0;
+}
+
+/* Grid Layout */
+.transactions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Transaction Card */
+.transaction-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+  position: relative;
+  z-index: 1;
+}
+
+.transaction-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.card-header {
+  padding: 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.transaction-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.card-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.card-id {
+  font-size: 11px;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+  margin-top: 4px;
+}
+
+/* Card Body */
+.card-body {
+  padding: 16px;
+  flex: 1;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 13px;
+}
+
+.card-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.card-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.card-value {
+  color: #111827;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 11px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.status-paid {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.status-pending {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.status-failed {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Buttons */
+.btn-confirm {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #0ea5a4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background-color: #0d9488;
+  transform: scale(1.02);
+}
+
+.btn-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-confirmed {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: not-allowed;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Summary Section */
+.transactions-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+  width: 100%;
+  min-width: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  border: 1px solid #e5e7eb;
+}
+
+.summary-label {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.summary-value.paid {
+  color: #10b981;
+}
+
+.summary-value.pending {
+  color: #f59e0b;
+}
+
+.summary-value.total {
+  color: #0ea5a4;
+}
+
+/* === RESPONSIVE DESIGN === */
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .transactions-wrapper {
+    gap: 16px;
+  }
+
+  .transactions-header {
+    padding-bottom: 16px;
+  }
+
+  .transactions-header h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .transactions-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card-header {
+    padding: 12px;
+  }
+
+  .card-amount {
+    font-size: 16px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .card-row {
+    padding: 6px 0;
+    font-size: 12px;
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .btn-confirm {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .transactions-summary {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .summary-card {
+    padding: 16px;
+  }
+
+  .summary-value {
+    font-size: 18px;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .transactions-wrapper {
+    gap: 12px;
+  }
+
+  .transactions-header h1 {
+    font-size: 18px;
+  }
+
+  .transactions-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card-header {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .transaction-icon {
+    font-size: 24px;
+  }
+
+  .card-amount {
+    font-size: 14px;
+  }
+
+  .card-id {
+    font-size: 10px;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .card-row {
+    padding: 5px 0;
+    font-size: 11px;
+  }
+
+  .status-badge {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  .btn-confirm {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .transactions-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    padding: 12px;
+  }
+
+  .summary-value {
+    font-size: 16px;
+  }
+}

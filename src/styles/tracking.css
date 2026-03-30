@@ -1,0 +1,575 @@
+/* Tracking Container */
+.tracking-container {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 100px);
+  background: #f3fbf6;
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
+  position: relative;
+}
+
+.tracking-container.collapsed {
+  margin-left: 96px;
+}
+
+.tracking-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 100px);
+  background: #f3fbf6;
+  font-size: 18px;
+  color: #146f05;
+  font-weight: 600;
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
+}
+
+.tracking-loading.collapsed {
+  margin-left: 96px;
+}
+
+/* Map */
+.tracking-map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: relative;
+}
+
+.leaflet-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #e5e3df !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.popup-content {
+  padding: 8px 0;
+}
+
+.popup-label {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0d3b2f;
+}
+
+.popup-text {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Ride Info Panel */
+.ride-info-panel {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 360px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 10;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  animation: slideInRight 300ms ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.driver-header {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.driver-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.driver-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d3b2f;
+}
+
+.driver-info p {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.plate-number {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #146f05;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+}
+
+.close-btn:hover {
+  color: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.status-badge.ongoing {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.completed {
+  background: #d1fcca;
+  color: #166534;
+}
+
+.status-badge.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Trip Details */
+.trip-details {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.detail-row:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  color: #146f05;
+}
+
+.detail-info {
+  flex: 1;
+}
+
+.detail-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  margin: 4px 0 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d3b2f;
+}
+
+.fare-icon {
+  font-size: 20px;
+}
+
+/* Locations Section */
+.locations-section {
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.location-item {
+  display: flex;
+  gap: 12px;
+}
+
+.location-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.location-item.pickup .location-dot {
+  background: #146f05;
+}
+
+.location-item.dropoff .location-dot {
+  background: #dc2626;
+}
+
+.location-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.location-address {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0d3b2f;
+  word-break: break-word;
+}
+
+.location-connector {
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, #146f05, #dc2626);
+  margin: 8px 5px;
+}
+
+/* Action Buttons */
+.panel-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 150ms ease;
+}
+
+.action-btn.call {
+  background: #ecfdf5;
+  color: #146f05;
+  border: 2px solid #146f05;
+}
+
+.action-btn.call:hover {
+  background: #146f05;
+  color: white;
+}
+
+.action-btn.message {
+  background: #ecfdf5;
+  color: #146f05;
+  border: 2px solid #146f05;
+}
+
+.action-btn.message:hover {
+  background: #146f05;
+  color: white;
+}
+
+.action-btn.complete {
+  background: linear-gradient(135deg, #146f05 0%, #00c66a 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(20, 111, 5, 0.3);
+}
+
+.action-btn.complete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(20, 111, 5, 0.4);
+}
+
+/* Modal */
+.tracking-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 200ms ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tracking-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 24px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 300ms ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.tracking-modal h2 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0d3b2f;
+}
+
+.tracking-modal p {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.modal-btn.cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.modal-btn.cancel:hover {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.modal-btn.confirm {
+  background: #dc2626;
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.modal-btn.confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* Leaflet Control Customization */
+.leaflet-control-container {
+  z-index: 5;
+}
+
+.leaflet-control-zoom {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: white;
+  color: #146f05;
+  font-weight: 700;
+  border: none;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: #f3fbf6;
+  color: #00c66a;
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.9) !important;
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Scrollbar */
+.ride-info-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ride-info-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ride-info-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.ride-info-panel::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ride-info-panel {
+    width: 320px;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tracking-container {
+    flex-direction: column;
+    margin-left: 0;
+    height: auto;
+  }
+
+  .tracking-container.collapsed {
+    margin-left: 0;
+  }
+
+  .tracking-map {
+    height: 400px;
+  }
+
+  .ride-info-panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    bottom: auto;
+    right: auto;
+    border-radius: 16px 16px 0 0;
+    margin-top: -1px;
+    animation: slideInUp 300ms ease;
+  }
+
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .ride-info-panel::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tracking-map {
+    height: 300px;
+  }
+
+  .ride-info-panel {
+    padding: 16px;
+  }
+
+  .driver-header {
+    gap: 10px;
+  }
+
+  .driver-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .driver-info h3 {
+    font-size: 15px;
+  }
+
+  .detail-row {
+    padding: 10px 0;
+  }
+
+  .detail-value {
+    font-size: 14px;
+  }
+
+  .action-btn {
+    padding: 10px;
+    font-size: 12px;
+  }
+}

@@ -7,16 +7,44 @@
 .login-form .field{ position:relative; display:block; margin:12px 40px 15px 15px }
 .login-form input{ width:100%; padding:16px 16px; border-radius:12px; border:1px solid #e6e6e6; font-size:15px }
 .email-field .field-icon{ display:none }
-.pass-field .hide-toggle{ position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:transparent; color:#6b7780; cursor:pointer; font-size:13px }
+.pass-field .hide-toggle{ position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:transparent; color:#6b7780; cursor:pointer; padding:4px; display:flex; align-items:center; justify-content:center; transition:color 0.2s ease }
+.pass-field .hide-toggle:hover{ color:#184d2a }
 .help-text{ text-align:left; color:#6b7780; font-size:13px; margin-top:6px }
+.error-message{ background:#fee; border:1px solid #fcc; color:#c33; padding:10px 12px; border-radius:8px; margin:8px 0; font-size:13px; text-align:center }
 .actions{ margin-top:16px }
-.btn-primary.large{ width:100%; padding:16px 20px; border-radius:12px; font-weight:900; background: linear-gradient(180deg,#00c66a); border:none; color:#2b2b2b; font-size:16px }
+.btn-primary.large{ width:100%; padding:16px 20px; border-radius:12px; font-weight:900; background: linear-gradient(180deg,#00c66a); border:none; color:#2b2b2b; font-size:16px; text-align: center; display: flex; align-items: center; justify-content: center; }
 .divider{ margin:18px 0; display:flex; align-items:center; gap:12px; color:#8b8b8b; font-size:13px }
 .divider::before, .divider::after{ content:''; flex:1; height:1px; background:#eee }
 .socials{ display:flex; gap:10px; justify-content:center }
 .social-btn{ background:#fff; border:1px solid #e6e6e6; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700 }
 .signup-cta{ margin-top:12px; color:#6b7780; font-size:13px }
 .signup-cta a{ color:#184d2a; font-weight:700 }
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  color: #146f05;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 180ms ease;
+  z-index: 100;
+}
+
+.back-button:hover {
+  background: #f0f0f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(-3px);
+}
 
 @media (max-width:900px){
 	.login-card{ width:100%; margin:20px; padding:24px }

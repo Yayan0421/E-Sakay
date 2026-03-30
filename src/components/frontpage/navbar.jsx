@@ -1,22 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import logo from '../../assets/logo.png.jpg'
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
   return (
     <header className="esakay-nav">
       <div className="nav-inner">
         <div className="brand">
-          <span className="brand-icon">⚡</span>
+          <img src={logo} alt="E-Sakay" className="brand-logo" />
           <span className="brand-text">E-Sakay</span>
         </div>
 
-        <nav className="nav-links">
-          <a href="#features">Features</a>
-          <a href="#how">How It Works</a>
-          <a href="#about">About</a>
+        <button className="hamburger" onClick={toggleMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+          <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
+          <a href="#features" onClick={() => setIsMenuOpen(false)}>Features</a>
+          <a href="#testimonials" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
+          <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
         </nav>
 
         <div className="nav-cta">
-          <button className="btn-primary">Go to Dashboard</button>
+          <Link to="/signup" className="btn-primary">Get Started</Link>
         </div>
       </div>
     </header>

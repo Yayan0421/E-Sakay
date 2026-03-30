@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/App.css'
 import App from './App.jsx'
+import 'leaflet/dist/leaflet.css'
 
 if (import.meta.env.DEV) {
   const _warn = console.warn;

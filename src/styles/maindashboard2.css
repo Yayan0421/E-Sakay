@@ -1,0 +1,11 @@
+/* How It Works Section */
+.dashboard-section {
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
+  min-height: auto;
+ 
+}
+
+.dashboard-section.sidebar-collapsed {
+  margin-left: 96px;
+}

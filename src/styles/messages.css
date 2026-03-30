@@ -1,0 +1,56 @@
+/* Messages Page Header */
+.messages-page-header {
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
+  background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+  padding: 2rem;
+  border-bottom: 2px solid #146f05;
+  margin-bottom: 1.5rem;
+}
+
+.messages-page-header.sidebar-collapsed {
+  margin-left: 96px;
+}
+
+.messages-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.messages-main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #063808;
+  margin: 0 0 0.5rem 0;
+}
+
+.messages-tagline {
+  font-size: 1.125rem;
+  color: #146f05;
+  margin: 0;
+}
+
+/* Messages Page Wrapper */
+.messages-page-wrapper {
+  margin-left: 300px;
+  padding: 1.5rem 2rem;
+  transition: margin-left 180ms ease;
+  min-height: calc(100vh - 200px);
+  background: #ffffff;
+}
+
+.messages-page-wrapper.sidebar-collapsed {
+  margin-left: 96px;
+}
+
+/* Messages Page Container */
+.messages-page {
+  margin-left: 300px;
+  padding: 1.5rem 2rem;
+  transition: margin-left 180ms ease;
+  min-height: 100vh;
+}
+
+.messages-page.sidebar-collapsed {
+  margin-left: 96px;
+}

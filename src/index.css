@@ -1,12 +1,7 @@
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+/* Global entry CSS — keep minimal to avoid postcss @import resolution issues */
+/* App styles are imported directly from `main.jsx` */
 
-@tailwind base;
-
-@custom-variant dark (&:is(.dark *));
-@tailwind components;
-@tailwind utilities;
+/* Add global overrides here if needed */
 
 /* Global entry CSS — keep minimal to avoid postcss @import resolution issues */
 /* App styles are imported directly from `main.jsx` */

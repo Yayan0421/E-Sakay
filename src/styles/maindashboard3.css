@@ -1,0 +1,118 @@
+/* Animation for hover fill effect from top to bottom */
+@keyframes fillTopToBottom {
+  0% {
+    background: linear-gradient(180deg, transparent 0%, transparent 100%);
+  }
+  100% {
+    background: linear-gradient(180deg, #00c66a 0%, #00c66a 100%);
+  }
+}
+
+/* Why Ride With Us Section */
+.why-ride-section {
+ margin-top: 50px;
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
+  min-height: auto;
+  padding: 2rem 0;
+}
+
+.why-ride-section.sidebar-collapsed {
+  margin-left: 96px;
+}
+
+.why-ride-container {
+  padding: 2.5rem 4rem;
+  text-align: center;
+}
+
+.why-ride-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.why-ride-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 180ms ease;
+  cursor: pointer;
+}
+
+.feature-card:hover {
+  animation: fillTopToBottom 300ms ease forwards;
+  color: #fff;
+  border-color: #00c66a;
+  box-shadow: 0 4px 12px rgba(0, 198, 106, 0.25);
+}
+
+.feature-card:hover .feature-description {
+  color: #000000;
+}
+
+.feature-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  height: 50px;
+  align-items: center;
+}
+
+.feature-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+.feature-description {
+  font-size: 0.875rem;
+  color: #000000;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .why-ride-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .why-ride-section {
+    margin-left: 96px;
+  }
+
+  .why-ride-title {
+    font-size: 1.75rem;
+  }
+}
