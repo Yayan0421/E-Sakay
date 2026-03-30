@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { apiUrl } from '../../lib/api'
 import '../../styles/messages.css'
 
 export default function Message({ collapsed = false }){
@@ -15,7 +16,7 @@ export default function Message({ collapsed = false }){
 	const fetchPendingBookings = useCallback(async () => {
 		try {
 			console.log('Fetching pending bookings for:', userData.email)
-			const response = await fetch(`http://localhost:4001/api/bookings/passenger?passengerEmail=${userData.email}`)
+			const response = await fetch(apiUrl(`/api/bookings/passenger?passengerEmail=${encodeURIComponent(userData.email)}`))
 			const data = await response.json()
 			console.log('Bookings fetched:', data.data)
 			if (data.data) {
@@ -31,7 +32,7 @@ export default function Message({ collapsed = false }){
 	const fetchDrivers = useCallback(async () => {
 		try {
 			console.log('Fetching drivers...')
-			const response = await fetch('http://localhost:4001/api/messages/drivers')
+			const response = await fetch(apiUrl('/api/messages/drivers'))
 			const data = await response.json()
 			console.log('Drivers fetched:', data.data)
 			setDrivers(data.data || [])
@@ -45,7 +46,7 @@ export default function Message({ collapsed = false }){
 		if (!selectedBooking || !userData.email) return
 		try {
 			console.log('Fetching messages for booking:', selectedBooking.id)
-			const response = await fetch(`http://localhost:4001/api/messages/conversation?bookingId=${selectedBooking.id}`)
+			const response = await fetch(apiUrl(`/api/messages/conversation?bookingId=${encodeURIComponent(selectedBooking.id)}`))
 			const data = await response.json()
 			console.log('Messages fetched:', data.data?.length, 'messages')
 			setMessages(data.data || [])
@@ -90,7 +91,7 @@ export default function Message({ collapsed = false }){
 		setLoading(true)
 		try {
 			console.log('Sending message for booking', selectedBooking.id)
-			const response = await fetch('http://localhost:4001/api/messages/send', {
+			const response = await fetch(apiUrl('/api/messages/send'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({

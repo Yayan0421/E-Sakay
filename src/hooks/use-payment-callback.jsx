@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { apiUrl } from '../lib/api'
 
 export function usePaymentCallback() {
   const [searchParams] = useSearchParams()
@@ -9,14 +10,11 @@ export function usePaymentCallback() {
   const confirmPaymentWithBackend = async (txId) => {
     try {
       console.log('Confirming payment with backend for txId:', txId)
-      const response = await fetch(
-        'http://localhost:4001/api/payments/confirm-payment',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ transactionId: txId })
-        }
-      )
+      const response = await fetch(apiUrl('/api/payments/confirm-payment'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactionId: txId })
+      })
       const data = await response.json()
       console.log('Payment confirmation response:', data)
 

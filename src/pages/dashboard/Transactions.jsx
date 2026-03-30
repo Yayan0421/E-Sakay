@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { apiUrl } from '../../lib/api'
 import '../../styles/transactions.css'
 
 export default function Transactions() {
@@ -21,9 +22,7 @@ export default function Transactions() {
       }
 
       console.log('Fetching transactions for email:', passengerEmail)
-      const response = await fetch(
-        `http://localhost:4001/api/payments/history?passengerEmail=${passengerEmail}`
-      )
+      const response = await fetch(apiUrl(`/api/payments/history?passengerEmail=${encodeURIComponent(passengerEmail)}`))
       const data = await response.json()
       
       console.log('Transaction response:', data)
@@ -59,14 +58,11 @@ export default function Transactions() {
     setConfirming(transactionId)
     
     try {
-      const response = await fetch(
-        'http://localhost:4001/api/payments/confirm-payment',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ transactionId })
-        }
-      )
+      const response = await fetch(apiUrl('/api/payments/confirm-payment'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactionId })
+      })
       const data = await response.json()
 
       if (response.ok && data.data.status === 'paid') {

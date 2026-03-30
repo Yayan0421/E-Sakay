@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import receivedQR from '../../assets/received_33839938735653102.webp'
+import { apiUrl } from '../../lib/api'
 
 export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
   const [loading, setLoading] = useState(false)
@@ -34,7 +35,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
       })
 
       // Call backend to create payment
-      const response = await fetch('http://localhost:4001/api/payments/create-payment', {
+      const response = await fetch(apiUrl('/api/payments/create-payment'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

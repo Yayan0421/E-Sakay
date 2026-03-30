@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { apiUrl } from '../../lib/api'
 import '../../styles/login.css'
 import logo from '../../assets/logo.png.jpg'
 
@@ -17,7 +18,7 @@ function Login() {
     setLoading(true)
     
     try {
-      const response = await fetch('http://localhost:4001/api/login', {
+      const response = await fetch(apiUrl('/api/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

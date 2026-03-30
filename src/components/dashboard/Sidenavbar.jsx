@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { apiUrl } from '../../lib/api'
 import '../../styles/sidenavbar.css'
 import logo from '../../assets/logo.png.jpg'
 
@@ -93,7 +94,7 @@ export default function Sidenavbar({ collapsed, setCollapsed }) {
         return
       }
       console.log('Fetching pending bookings for:', userData.email)
-      const response = await fetch(`http://localhost:4001/api/bookings/passenger?passengerEmail=${userData.email}`)
+      const response = await fetch(apiUrl(`/api/bookings/passenger?passengerEmail=${encodeURIComponent(userData.email)}`))
       const data = await response.json()
       console.log('API Response:', data)
       if (data.data) {

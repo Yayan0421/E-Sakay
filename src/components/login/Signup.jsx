@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { apiUrl } from '../../lib/api'
 import '../../styles/signup.css'
 import tri2 from '../../assets/Tri2.jpg'
 
@@ -72,7 +73,7 @@ export default function Signup() {
 
     try {
       // Call backend to register
-      const response = await fetch('http://localhost:4001/api/register', {
+      const response = await fetch(apiUrl('/api/register'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

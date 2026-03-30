@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { HelpCircle, Mail, MessageSquare, Phone, Clock, Search, ChevronDown } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { apiUrl } from '../../lib/api'
 import '../../styles/support.css'
 
 export default function Support(){
@@ -23,7 +24,7 @@ export default function Support(){
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch('http://localhost:4001/api/support/faqs')
+      const response = await fetch(apiUrl('/api/support/faqs'))
       const data = await response.json()
       
       if (response.ok) {
@@ -128,7 +129,7 @@ export default function Support(){
       const passengerEmail = userData.email || localStorage.getItem('passengerEmail')
       const passengerName = userData.name || 'Passenger'
 
-      const response = await fetch('http://localhost:4001/api/support/ticket', {
+      const response = await fetch(apiUrl('/api/support/ticket'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
+import { apiUrl } from '../../lib/api'
 import '../../styles/rideshistory.css'
 
 export default function RidesHistory(){
@@ -37,7 +38,7 @@ export default function RidesHistory(){
       }
 
       // Fetch from rides_complete table instead
-      const response = await fetch(`http://localhost:4001/api/bookings/completed?passengerEmail=${passengerEmail}`)
+      const response = await fetch(apiUrl(`/api/bookings/completed?passengerEmail=${encodeURIComponent(passengerEmail)}`))
       console.log('API Response status:', response.status)
       const result = await response.json()
       

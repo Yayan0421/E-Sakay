@@ -3,6 +3,7 @@ import { MapPin, Navigation, FileText, User } from 'lucide-react';
 import { useOutletContext, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import PaymentModal from './PaymentModal';
+import { apiUrl } from '../../lib/api';
 import '../../styles/homedashboard.css';
 
 export default function MainDashboard() {
@@ -70,7 +71,7 @@ export default function MainDashboard() {
 
   const handleConfirmRide = async () => {
     try {
-      const response = await fetch('http://localhost:4001/api/bookings/create', {
+      const response = await fetch(apiUrl('/api/bookings/create'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -161,7 +162,6 @@ export default function MainDashboard() {
         text: 'Network error: ' + error.message,
         confirmButtonColor: '#f6bc0d'
       });
-    } finally {
     }
   };
 
