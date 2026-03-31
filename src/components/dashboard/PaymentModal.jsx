@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
-import receivedQR from '../../assets/received_33839938735653102.webp'
+import qrCodeImage from '../../assets/QR code.jpg'
 import { apiUrl } from '../../lib/api'
 
 export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
@@ -239,7 +239,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
               border: '2px solid #e5e7eb'
             }}>
               <img 
-                src={receivedQR}
+                src={qrCodeImage}
                 alt="QR Code" 
                 style={{ 
                   maxWidth: 250,
