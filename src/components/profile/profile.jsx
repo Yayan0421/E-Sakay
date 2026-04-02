@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useOutletContext, useNavigate } from 'react-router-dom'
-import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, X, LogOut, Shield, Eye, Bell, ArrowLeft, Camera } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { User, Mail, Phone, MapPin, Edit2, Save, X, LogOut, Shield, Eye, Bell, Camera, Star, AlertCircle } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
-import '../../styles/profile.css'
+import Swal from 'sweetalert2'
 
 export default function Profile(){
-  // Initialize Supabase inside component with useMemo to ensure env vars are loaded
   const supabase = useMemo(() => createClient(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_ANON_KEY
   ), [])
+
   const navigate = useNavigate()
-  const { collapsed } = useOutletContext() || { collapsed: false }
   const [isEditing, setIsEditing] = useState(false)
   const [activeTab, setActiveTab] = useState('personal')
   const [loading, setLoading] = useState(true)
@@ -22,19 +21,16 @@ export default function Profile(){
     email: '',
     phone: '',
     address: '',
-    avatarUrl: ''
+    avatar: 'P'
   })
 
   const [tempProfile, setTempProfile] = useState(profile)
-  const [, setProfileImage] = useState(null)
 
-  // Fetch profile data from Supabase
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true)
         
-        // Get current user
         const { data: { user }, error: authError } = await supabase.auth.getUser()
         
         if (authError) throw authError
@@ -43,14 +39,13 @@ export default function Profile(){
           return
         }
 
-        // Fetch profile from passengers table
         const { data, error: fetchError } = await supabase
           .from('passengers')
           .select('*')
           .eq('id', user.id)
           .single()
 
-        if (fetchError) throw fetchError
+        if (fetchError && fetchError.code !== 'PGRST116') throw fetchError
 
         if (data) {
           const profileData = {
@@ -58,10 +53,21 @@ export default function Profile(){
             email: data.email || '',
             phone: data.phone || '',
             address: data.address || '',
-            avatarUrl: data.avatar_url || data.name?.charAt(0) || 'P'
+            avatar: (data.name || 'P').charAt(0).toUpperCase()
           }
           setProfile(profileData)
           setTempProfile(profileData)
+        } else {
+          const userData = localStorage.getItem('user')
+          if (userData) {
+            const user = JSON.parse(userData)
+            setProfile(prev => ({
+              ...prev,
+              email: user.email,
+              name: user.name || '',
+              avatar: (user.name || user.email || 'P').charAt(0).toUpperCase()
+            }))
+          }
         }
       } catch (err) {
         console.error('Error fetching profile:', err)
@@ -74,421 +80,340 @@ export default function Profile(){
     fetchProfile()
   }, [supabase])
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        setProfileImage(event.target.result)
-        setTempProfile(prev => ({
-          ...prev,
-          profilePicture: event.target.result
-        }))
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleEditClick = () => {
-    setIsEditing(true)
-    setTempProfile(profile)
-  }
-
   const handleSave = async () => {
     try {
       setLoading(true)
       
-      // Get current user
       const { data: { user }, error: authError } = await supabase.auth.getUser()
       
       if (authError) throw authError
       if (!user) throw new Error('User not authenticated')
 
-      // Update profile in Supabase passengers table
       const { error: updateError } = await supabase
         .from('passengers')
-        .update({
+        .upsert({
+          id: user.id,
           name: tempProfile.name,
+          email: tempProfile.email,
           phone: tempProfile.phone,
           address: tempProfile.address,
-          avatar_url: tempProfile.avatarUrl
-        })
-        .eq('id', user.id)
+          updated_at: new Date()
+        }, { onConflict: 'id' })
 
       if (updateError) throw updateError
 
       setProfile(tempProfile)
       setIsEditing(false)
       setError(null)
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Profile Updated',
+        text: 'Your profile has been saved successfully',
+        confirmButtonColor: '#0ea5a4'
+      })
     } catch (err) {
       console.error('Error saving profile:', err)
       setError(err.message)
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.message,
+        confirmButtonColor: '#0ea5a4'
+      })
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCancel = () => {
-    setIsEditing(false)
-    setTempProfile(profile)
   }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setTempProfile(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      avatar: name === 'name' ? (value || 'P').charAt(0).toUpperCase() : prev.avatar
     }))
   }
 
-  return (
-    <>
-      {loading && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-          <p>Loading profile...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="error-message">
-          <p>Error: {error}</p>
-          <button onClick={() => setError(null)}>Dismiss</button>
-        </div>
-      )}
-
-      {/* Profile Header */}
-      <div className={`profile-page-header ${collapsed ? 'sidebar-collapsed' : ''}`}>
-        <div className="profile-header-content">
-          <button className="back-button" onClick={() => navigate(-1)}>
-            <ArrowLeft size={20} />
-            Back
-          </button>
-          <h1 className="profile-main-title">My Profile</h1>
-          <p className="profile-tagline">Manage your account information and preferences</p>
+  if (loading && !profile.email) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin">
+            <div className="w-8 h-8 border-4 border-gray-200 border-t-teal-500 rounded-full"></div>
+          </div>
+          <p className="text-gray-600 mt-4">Loading profile...</p>
         </div>
       </div>
+    )
+  }
 
-      {/* Profile Main Content */}
-      <div className={`profile-page-container ${collapsed ? 'sidebar-collapsed' : ''}`}>
-        
-        {/* Profile Card Section */}
-        <div className="profile-card">
-          <div className="profile-avatar-section">
-            <div className="profile-avatar-container">
-              <div className="profile-avatar">
-                {typeof tempProfile.avatarUrl === 'string' && tempProfile.avatarUrl.startsWith('data:') ? (
-                  <img src={tempProfile.avatarUrl} alt="Profile" className="profile-avatar-img" />
-                ) : typeof tempProfile.avatarUrl === 'string' && tempProfile.avatarUrl.startsWith('http') ? (
-                  <img src={tempProfile.avatarUrl} alt="Profile" className="profile-avatar-img" />
-                ) : (
-                  tempProfile.avatarUrl
-                )}
-              </div>
-              {isEditing && (
-                <label className="profile-pic-upload" title="Change Profile Photo">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="profile-pic-input"
-                  />
-                  <Camera size={20} color="white" />
-                </label>
-              )}
+  return (
+    <div className="w-full max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">My Profile</h1>
+        <p className="text-sm text-gray-500 mt-1">Manage your personal information</p>
+      </div>
+
+      {/* Profile Card */}
+      <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 mb-6">
+        {/* Avatar Section */}
+        <div className="flex flex-col md:flex-row gap-6 mb-6 items-center md:items-start">
+          <div className="relative flex-shrink-0">
+            <div className="w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+              {tempProfile.avatar}
             </div>
-            <div className="profile-basic-info">
-              <h2 className="profile-name">{profile.name}</h2>
-              <p className="profile-email">{profile.email}</p>
-              <p className="profile-member">Member since March 2024</p>
-              <div className="profile-rating">
-                <span className="rating-stars">⭐⭐⭐⭐⭐</span>
-                <span className="rating-text">4.9 / 5.0</span>
+          </div>
+
+          {/* Profile Info */}
+          <div className="flex-1 text-center md:text-left">
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">{profile.name || 'Not Set'}</h2>
+            <p className="text-gray-600 mb-3">{profile.email}</p>
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+              <div className="bg-yellow-50 px-3 py-1 rounded-full flex items-center gap-1">
+                <Star size={16} className="text-yellow-500 fill-current" />
+                <span className="text-sm font-semibold text-yellow-700">4.9 Rating</span>
+              </div>
+              <div className="bg-green-50 px-3 py-1 rounded-full">
+                <span className="text-sm font-semibold text-green-700">✓ Verified</span>
               </div>
             </div>
           </div>
-          
-          <div className="profile-actions">
-            {!isEditing ? (
-              <button className="btn-edit" onClick={handleEditClick}>
-                <Edit2 size={18} />
-                Edit Profile
-              </button>
-            ) : (
-              <div className="edit-actions">
-                <button className="btn-save" onClick={handleSave}>
-                  <Save size={18} />
-                  Save Changes
+
+          {/* Edit Button */}
+          {!isEditing && (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="px-6 py-2 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center gap-2 whitespace-nowrap"
+            >
+              <Edit2 size={18} />
+              Edit
+            </button>
+          )}
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex gap-2">
+            <AlertCircle size={20} className="text-red-600 flex-shrink-0" />
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Tab Navigation */}
+        <div className="border-t border-gray-200 pt-4">
+          <div className="flex gap-2 mb-6 overflow-x-auto">
+            {[
+              { id: 'personal', label: 'Personal', icon: User },
+              { id: 'security', label: 'Security', icon: Shield },
+              { id: 'preferences', label: 'Preferences', icon: Bell }
+            ].map(tab => {
+              const Icon = tab.icon
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all text-sm md:text-base ${
+                    activeTab === tab.id
+                      ? 'bg-teal-100 text-teal-700'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Icon size={18} />
+                  <span className="hidden md:inline">{tab.label}</span>
                 </button>
-                <button className="btn-cancel" onClick={handleCancel}>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'personal' && (
+        <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Personal Information</h3>
+
+          {isEditing ? (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={tempProfile.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                <input
+                  type="email"
+                  value={tempProfile.email}
+                  disabled
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={tempProfile.phone}
+                    onChange={handleInputChange}
+                    placeholder="Enter your phone number"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={tempProfile.address}
+                    onChange={handleInputChange}
+                    placeholder="Enter your address"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={handleSave}
+                  disabled={loading}
+                  className={`flex-1 py-2 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 ${
+                    loading
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-teal-500 hover:bg-teal-600 active:scale-95'
+                  }`}
+                >
+                  <Save size={18} />
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditing(false)
+                    setTempProfile(profile)
+                  }}
+                  className="flex-1 py-2 rounded-lg font-semibold text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                >
                   <X size={18} />
                   Cancel
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 py-3 border-b border-gray-200">
+                <User size={20} className="text-teal-600" />
+                <div>
+                  <p className="text-xs text-gray-500 font-semibold">Full Name</p>
+                  <p className="text-gray-900 font-medium">{profile.name || 'Not Set'}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 py-3 border-b border-gray-200">
+                <Mail size={20} className="text-teal-600" />
+                <div>
+                  <p className="text-xs text-gray-500 font-semibold">Email Address</p>
+                  <p className="text-gray-900 font-medium">{profile.email}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 py-3 border-b border-gray-200">
+                <Phone size={20} className="text-teal-600" />
+                <div>
+                  <p className="text-xs text-gray-500 font-semibold">Phone Number</p>
+                  <p className="text-gray-900 font-medium">{profile.phone || 'Not Set'}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 py-3">
+                <MapPin size={20} className="text-teal-600" />
+                <div>
+                  <p className="text-xs text-gray-500 font-semibold">Address</p>
+                  <p className="text-gray-900 font-medium">{profile.address || 'Not Set'}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+      )}
 
-        {/* Tab Navigation */}
-        <div className="profile-tabs">
-          <button
-            className={`tab-button ${activeTab === 'personal' ? 'active' : ''}`}
-            onClick={() => setActiveTab('personal')}
-          >
-            <User size={18} />
-            Personal Info
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'security' ? 'active' : ''}`}
-            onClick={() => setActiveTab('security')}
-          >
-            <Shield size={18} />
-            Security
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'preferences' ? 'active' : ''}`}
-            onClick={() => setActiveTab('preferences')}
-          >
-            <Bell size={18} />
-            Preferences
-          </button>
+      {activeTab === 'security' && (
+        <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 space-y-4">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Account Security</h3>
+
+          {[
+            {
+              icon: Shield,
+              title: 'Password',
+              description: 'Change your password regularly',
+              action: 'Change Password'
+            },
+            {
+              icon: Eye,
+              title: 'Two-Factor Authentication',
+              description: 'Add extra layer of security',
+              action: 'Enable 2FA'
+            },
+            {
+              icon: LogOut,
+              title: 'Active Sessions',
+              description: 'Manage connected devices',
+              action: 'Manage Sessions'
+            }
+          ].map((item, idx) => {
+            const Icon = item.icon
+            return (
+              <div key={idx} className="border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+                <Icon size={24} className="text-teal-600 flex-shrink-0" />
+                <div className="flex-1">
+                  <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                  <p className="text-sm text-gray-600 mb-3">{item.description}</p>
+                  <button className="px-3 py-1 text-sm bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition-colors font-medium">
+                    {item.action}
+                  </button>
+                </div>
+              </div>
+            )
+          })}
         </div>
+      )}
 
-        {/* Personal Information Tab */}
-        {activeTab === 'personal' && (
-          <div className="profile-section">
-            <div className="section-header">
-              <h3>Personal Information</h3>
+      {activeTab === 'preferences' && (
+        <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 space-y-4">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h3>
+
+          {[
+            { icon: '📧', label: 'Email Notifications', checked: true },
+            { icon: '📱', label: 'SMS Notifications', checked: false },
+            { icon: '🔔', label: 'Push Notifications', checked: true },
+            { icon: '🎉', label: 'Promotions', checked: true },
+            { icon: '⚠️', label: 'Safety Alerts', checked: true }
+          ].map((pref, idx) => (
+            <div key={idx} className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{pref.icon}</span>
+                <span className="font-medium text-gray-900">{pref.label}</span>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" defaultChecked={pref.checked} className="sr-only peer" />
+                <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+              </label>
             </div>
-
-            {isEditing ? (
-              <form className="profile-form">
-                <div className="form-row">
-                  <div className="form-group full-width">
-                    <label>Full Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={tempProfile.name}
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Email Address</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={tempProfile.email}
-                      onChange={handleInputChange}
-                      disabled
-                      className="form-input"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Phone Number</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={tempProfile.phone}
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group full-width">
-                    <label>Address</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={tempProfile.address}
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-              </form>
-            ) : (
-              <div className="profile-info-grid">
-                <div className="info-item full-width">
-                  <span className="info-label">
-                    <User size={18} />
-                    Full Name
-                  </span>
-                  <span className="info-value">{profile.name}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">
-                    <Mail size={18} />
-                    Email Address
-                  </span>
-                  <span className="info-value">{profile.email}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">
-                    <Phone size={18} />
-                    Phone Number
-                  </span>
-                  <span className="info-value">{profile.phone}</span>
-                </div>
-                <div className="info-item full-width">
-                  <span className="info-label">
-                    <MapPin size={18} />
-                    Address
-                  </span>
-                  <span className="info-value">{profile.address}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Security Tab */}
-        {activeTab === 'security' && (
-          <div className="profile-section">
-            <div className="section-header">
-              <h3>Account Security</h3>
-            </div>
-
-            <div className="security-grid">
-              <div className="security-card">
-                <div className="security-header">
-                  <Shield size={24} color="#146f05" />
-                  <h4>Password</h4>
-                </div>
-                <p className="security-description">Change your password regularly to keep your account secure</p>
-                <button className="btn-security">Change Password</button>
-              </div>
-
-              <div className="security-card">
-                <div className="security-header">
-                  <Eye size={24} color="#146f05" />
-                  <h4>Two-Factor Authentication</h4>
-                </div>
-                <p className="security-description">Add an extra layer of security to your account</p>
-                <button className="btn-security">Enable 2FA</button>
-              </div>
-
-              <div className="security-card">
-                <div className="security-header">
-                  <Shield size={24} color="#146f05" />
-                  <h4>Active Sessions</h4>
-                </div>
-                <p className="security-description">Manage devices connected to your account</p>
-                <button className="btn-security">Manage Sessions</button>
-              </div>
-
-              <div className="security-card">
-                <div className="security-header">
-                  <LogOut size={24} color="#146f05" />
-                  <h4>Sign Out Everywhere</h4>
-                </div>
-                <p className="security-description">Sign out of all sessions on other devices</p>
-                <button className="btn-security">Sign Out All</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Preferences Tab */}
-        {activeTab === 'preferences' && (
-          <div className="profile-section">
-            <div className="section-header">
-              <h3>Notification Preferences</h3>
-            </div>
-
-            <div className="preferences-grid">
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>Ride Updates</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Receive notifications about your rides</p>
-              </div>
-
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>Promotions & Offers</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Get notified about special deals and promotions</p>
-              </div>
-
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>Safety Alerts</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Receive important safety notifications</p>
-              </div>
-
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>Email Notifications</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Receive updates via email</p>
-              </div>
-
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>SMS Notifications</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Receive updates via SMS text messages</p>
-              </div>
-
-              <div className="preference-item">
-                <div className="preference-header">
-                  <h4>Marketing Emails</h4>
-                  <label className="toggle-switch">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <p>Receive marketing and newsletter emails</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Danger Zone Section */}
-        <div className="profile-section danger-zone">
-          <div className="section-header">
-            <h3>Danger Zone</h3>
-          </div>
-          <div className="danger-actions">
-            <div className="danger-action-item">
-              <div>
-                <h4>Delete Account</h4>
-                <p>Permanently delete your account and all associated data</p>
-              </div>
-              <button className="btn-danger">Delete Account</button>
-            </div>
-          </div>
+          ))}
         </div>
-
-      </div>
-    </>
+      )}
+    </div>
   )
 }
