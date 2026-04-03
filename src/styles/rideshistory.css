@@ -1,20 +1,21 @@
 /* Rides History Page Header */
 .rides-page-header {
-  margin-left: 300px;
-  transition: margin-left 180ms ease;
   background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
   padding: 2rem;
   border-bottom: 2px solid #146f05;
   margin-bottom: 1.5rem;
 }
 
-.rides-page-header.sidebar-collapsed {
-  margin-left: 96px;
-}
-
 .rides-header-content {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.rides-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
 .rides-main-title {
@@ -30,124 +31,531 @@
   margin: 0;
 }
 
-/* Rides History Page Wrapper */
+.rides-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box svg {
+  color: #0ea5a4;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+/* Rides Page Wrapper */
 .rides-page-wrapper {
-  margin-left: 300px;
-  transition: margin-left 180ms ease;
-  padding: 0 2rem 2rem 2rem;
-  background: #ffffff;
+  padding: 1.5rem 2rem;
+  background: #f8fafc;
+  min-height: calc(100vh - 300px);
 }
 
-.rides-page-wrapper.sidebar-collapsed {
-  margin-left: 96px;
-}
-
-.rides-page{
-  padding: 28px;
+/* Rides Page */
+.rides-page {
+  padding: 0;
   font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   color: #0f172a;
-  margin-left: 0;
-  transition: margin-left 180ms ease;
-  min-height: 1px;
 }
 
-.rides-page.sidebar-collapsed {
-  margin-left: 96px;
+/* Loading State */
+.rides-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: #6b7280;
 }
-.rides-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-  
-}
-.rides-title{font-weight:800; font-size:40px;}
-.rides-filters{display:flex; gap:6px; align-items:center; }
-.pill{padding:9px 14px; border-radius:999px;  background:#fff; border:1px solid #e6eef6; cursor:pointer}
-.pill.active{background:#0ea5a4; color:#fff; border-color:transparent; }
-.rides-card{display:flex; gap:20px; border: #000 2px solid; background:#fff; border-radius:12px; padding:24px; box-shadow:0 6px 18px rgba(12,30,60,0.06); position:relative}
-.left-col{width:340px}
-.driver-box{display:flex; gap:12px; align-items:center; border: 2px solid #000; padding: 12px; border-radius: 8px; background: #fff;}
-.driver-avatar{width:96px; height:96px; border-radius:10px; background:#f3f7fb; display:flex; align-items:center; justify-content:center; font-weight:700}
-.driver-info strong{display:block}
-.meta-row{display:flex; gap:12px; margin-top:12px}
-.meta-item{background:#f8fafc; padding:10px; border-radius:8px; flex:1; text-align:center}
-.right-col{flex:1}
-.fare-box{display:flex; justify-content:space-between; align-items:flex-start}
-.total-fare{font-size:24px; font-weight:900; color:#0b1220}
-.transaction{margin-top:14px; background:#fbfdff; padding:14px; border-radius:8px; border:1px solid #eef2f7}
-.transaction-row{display:flex; justify-content:space-between; margin-bottom:8px}
-.small{font-size:13px; color:#6b7280}
-.hide-btn{background:#109eab; border:1px solid hsl(215, 99%, 54%); padding:8px 12px; border-radius:8px; cursor:pointer}
-.feedback-btn{background:hsl(140, 92%, 45%); color:#fff; padding:8px 12px; border-radius:8px; border:none; cursor:pointer}
-.bike-image{width:100%; height:180px; background:#eef2f8; border-radius:8px; margin-top:12px}
 
-/* subtle top accent bar */
-.rides-card:before{
-  content: '';
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #0ea5a4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Filter Section */
+.rides-filters-section {
+  margin-bottom: 28px;
+}
+
+.rides-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.rides-filter-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+.rides-filter-count {
+  font-size: 14px;
+  color: #6b7280;
+  background: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.rides-filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #6b7280;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 200ms ease;
+}
+
+.filter-btn:hover {
+  border-color: #0ea5a4;
+  color: #0ea5a4;
+  background: #f0fdfc;
+}
+
+.filter-btn.active {
+  border-color: #0ea5a4;
+  background: #0ea5a4;
+  color: #ffffff;
+}
+
+.filter-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Rides List */
+.rides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Ride Card */
+.ride-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ride-card:hover {
+  border-color: #0ea5a4;
+  box-shadow: 0 4px 12px rgba(14, 165, 164, 0.12);
+}
+
+.ride-status-badge {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 12px;
-  height: 6px;
-  background: linear-gradient(90deg,#04c82e,#08f73c);
-  border-radius: 6px;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-completed {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Ride Card Header */
+.ride-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.driver-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.driver-avatar-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5a4, #14b8a6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.driver-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.driver-name {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.driver-role {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.booking-id {
+  font-size: 12px;
+  color: #0ea5a4;
+  font-weight: 600;
+}
+
+.ride-date-time {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: right;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.ride-icon {
+  color: #0ea5a4;
+  flex-shrink: 0;
+}
+
+.date-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.date-value {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.time-value {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Locations Section */
+.ride-locations {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.location-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.location-icon {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.location-icon.pickup {
+  color: #10b981;
+}
+
+.location-icon.dropoff {
+  color: #f59e0b;
+}
+
+.location-details {
+  flex: 1;
+}
+
+.location-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.location-address {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.location-coords {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: 'Courier New', monospace;
+}
+
+.location-divider {
+  width: 2px;
+  height: 40px;
+  background: #e2e8f0;
+}
+
+/* Passenger Info */
+.ride-passenger-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.info-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.info-icon {
+  color: #0ea5a4;
+  flex-shrink: 0;
+}
+
+.info-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.info-value {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+/* Empty State */
+.rides-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+  color: #6b7280;
+  gap: 16px;
+}
+
+.rides-empty-state svg {
+  opacity: 0.3;
+  color: #0ea5a4;
+}
+
+.rides-empty-state h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.rides-empty-state p {
+  margin: 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  .rides-page-header {
-    padding: 1.5rem;
-  }
-
-  .rides-main-title {
-    font-size: 2rem;
-  }
-
-  .rides-card {
+@media (max-width: 1024px) {
+  .rides-header-top {
     flex-direction: column;
+    gap: 1rem;
   }
 
-  .left-col,
-  .right-col {
+  .ride-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ride-date-time {
     width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .rides-page-header {
-    margin-left: 0 !important;
     padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
   }
 
   .rides-page-wrapper {
-    margin-left: 0 !important;
-    padding: 0 1rem 1.5rem 1rem;
+    padding: 1rem;
   }
 
   .rides-main-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .rides-tagline {
     font-size: 1rem;
   }
 
-  .rides-page {
-    padding: 1.5rem;
-    margin-left: 0 !important;
+  .rides-filter-title {
+    font-size: 18px;
   }
 
-  .rides-header {
+  .ride-card {
+    padding: 16px;
+  }
+
+  .ride-status-badge {
+    top: 12px;
+    right: 12px;
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .ride-locations {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    gap: 12px;
   }
 
-  .rides-filters {
-    flex-wrap: wrap;
-    width: 100%;
+  .location-divider {
+    display: none;
   }
+
+  .info-row {
+    flex-direction: column;
+  }
+
+  .stat-box {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rides-page-header {
+    padding: 1rem 0.75rem;
+  }
+
+  .rides-page-wrapper {
+    padding: 0.75rem;
+  }
+
+  .rides-main-title {
+    font-size: 1.5rem;
+  }
+
+  .rides-filter-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+    flex: 1;
+    min-width: calc(33.333% - 6px);
+  }
+
+  .ride-card {
+    padding: 12px;
+  }
+
+  .ride-card-header {
+    gap: 12px;
+  }
+
+  .driver-avatar-lg {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .driver-name {
+    font-size: 14px;
+  }
+
+  .ride-locations {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .rides-empty-state {
+    padding: 40px 20px;
+  }
+
+  .rides-empty-state h3 {
+    font-size: 18px;
+  }
+}
 
   .pill {
     flex: 1;
