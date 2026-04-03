@@ -290,16 +290,24 @@ export default function Profile(){
         avatar_url: result.avatar_url
       }))
 
+      // Update main profile to reflect saved state
+      setProfile(prev => ({
+        ...prev,
+        avatar_url: result.avatar_url
+      }))
+
       // Clear selected file
       setSelectedFile(null)
       setFilePreview(null)
 
+      console.log('Avatar successfully saved to database:', result)
+
       Swal.fire({
         icon: 'success',
-        title: 'Avatar Uploaded',
-        text: 'Your profile picture has been uploaded successfully',
+        title: 'Profile Picture Saved',
+        text: 'Your profile picture has been uploaded and saved to your database successfully',
         confirmButtonColor: '#0ea5a4',
-        timer: 2000
+        timer: 3000
       })
     } catch (err) {
       console.error('Error uploading avatar:', err)

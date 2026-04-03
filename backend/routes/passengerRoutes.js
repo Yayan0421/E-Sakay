@@ -196,11 +196,22 @@ router.post('/upload-avatar', upload.single('file'), async (req, res) => {
         return res.status(400).json({ error: 'Failed to update avatar: ' + updateError.message })
       }
 
-      console.log('Backend: Avatar URL saved to database:', updateData)
-      res.json({ success: true, avatar_url: publicUrl, data: updateData?.[0] || null })
+      console.log('Backend: Avatar URL saved to database successfully for passenger ID:', existing.id)
+      console.log('Backend: Avatar URL saved:', publicUrl)
+      res.json({ 
+        success: true, 
+        avatar_url: publicUrl, 
+        data: updateData?.[0] || null,
+        message: 'Avatar successfully uploaded and saved to database'
+      })
     } else {
       // If passenger doesn't exist yet, just return the URL
-      res.json({ success: true, avatar_url: publicUrl, message: 'Avatar uploaded. Please save profile to persist.' })
+      console.log('Backend: Passenger does not exist yet. Avatar will be saved when profile is created.')
+      res.json({ 
+        success: true, 
+        avatar_url: publicUrl, 
+        message: 'Avatar uploaded. Please save profile to persist to database.' 
+      })
     }
   } catch (err) {
     console.error('Backend: Upload avatar error:', err)
