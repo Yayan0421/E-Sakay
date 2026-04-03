@@ -3,10 +3,12 @@ import { Outlet } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Sidenavbar from '../components/dashboard/Sidenavbar'
 import DashboardFooter from '../components/dashboard/dashboardfooter'
+import MobileBottomNav from '../components/dashboard/MobileBottomNav'
 import { usePaymentCallback } from '../hooks/use-payment-callback'
 import '../styles/homedashboard.css'
 import '../styles/sidenavbar.css'
 import '../styles/App.css'
+import '../styles/mobile-bottom-nav.css'
 
 export default function Dashboard(){
 	const [collapsed, setCollapsed] = useState(false)
@@ -48,7 +50,7 @@ export default function Dashboard(){
 				</div>
 
 				{/* Main Content */}
-				<main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 overflow-auto transition-all duration-300 ease-in-out">
+			<main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 pb-40 md:pb-0 overflow-auto transition-all duration-300 ease-in-out">
 					<Outlet context={{collapsed}} />
 				</main>
 			</div>
@@ -57,6 +59,9 @@ export default function Dashboard(){
 			<div className="mt-auto w-full bg-white border-t border-gray-200">
 				<DashboardFooter />
 			</div>
+
+			{/* Mobile Bottom Navigation - Visible only on mobile */}
+			<MobileBottomNav />
 		</div>
 	)
 }
