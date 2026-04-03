@@ -306,17 +306,17 @@ export default function Profile(){
 
           {/* Edit Button */}
           {!isEditing && (
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-6 py-2 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center gap-2 whitespace-nowrap"
+                className="px-6 py-2 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
               >
                 <Edit2 size={18} />
                 Edit
               </button>
               <button
                 onClick={handleLogout}
-                className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center gap-2 whitespace-nowrap"
+                className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
               >
                 <LogOut size={18} />
                 Logout
