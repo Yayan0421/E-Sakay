@@ -108,7 +108,7 @@ This document outlines the complete mobile-first Tailwind CSS redesign of the E-
 
 ```jsx
 <div className="max-w-4xl mx-auto">
-  <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 
+  <div className="bg-linear-to-r from-emerald-500 to-emerald-600 
                   rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20">
     {/* Responsive buttons */}
     <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
