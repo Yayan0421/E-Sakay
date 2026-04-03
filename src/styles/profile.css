@@ -781,8 +781,6 @@ input:checked + .slider:before {
     justify-content: center;
   }
 }
-
-/* Loading and Error States */
 .loading-overlay {
   position: fixed;
   top: 0;
