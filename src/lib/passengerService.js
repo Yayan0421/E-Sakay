@@ -31,7 +31,7 @@ export const getPassengerByEmail = async (email) => {
     console.log('🔍 DEBUG: Fetching passenger by email:', email)
 
     // Use backend API instead of direct Supabase call
-    const response = await fetch(`${API_BASE_URL}/passengers/by-email/${encodeURIComponent(email)}`)
+    const response = await fetch(`${API_BASE_URL}/api/passengers/by-email/${encodeURIComponent(email)}`)
 
     if (!response.ok) {
       console.warn('Backend fetch failed:', response.status)
@@ -158,7 +158,7 @@ export const savePassengerProfile = async (passengerData) => {
     console.log('🔍 DEBUG: Attempting to save passenger:', passengerData)
 
     // Use backend API instead of direct Supabase call
-    const response = await fetch(`${API_BASE_URL}/passengers/save`, {
+    const response = await fetch(`${API_BASE_URL}/api/passengers/save`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
