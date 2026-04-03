@@ -463,12 +463,22 @@
 
 @media (max-width: 768px) {
   .rides-page-header {
+    margin-left: 0;
     padding: 1.5rem 1rem;
     margin-bottom: 1rem;
   }
 
+  .rides-page-header.sidebar-collapsed {
+    margin-left: 0;
+  }
+
   .rides-page-wrapper {
+    margin-left: 0;
     padding: 1rem;
+  }
+
+  .rides-page-wrapper.sidebar-collapsed {
+    margin-left: 0;
   }
 
   .rides-main-title {
@@ -510,62 +520,123 @@
   .stat-box {
     padding: 12px 16px;
   }
+
+  .rides-stats {
+    gap: 8px;
+  }
+
+  .rides-header-top {
+    gap: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
   .rides-page-header {
+    margin-left: 0 !important;
     padding: 1rem 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rides-page-header.sidebar-collapsed {
+    margin-left: 0 !important;
   }
 
   .rides-page-wrapper {
+    margin-left: 0 !important;
     padding: 0.75rem;
+    min-height: auto;
+  }
+
+  .rides-page-wrapper.sidebar-collapsed {
+    margin-left: 0 !important;
   }
 
   .rides-main-title {
     font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .rides-tagline {
+    font-size: 0.875rem;
   }
 
   .rides-filter-buttons {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
   .filter-btn {
-    font-size: 12px;
-    padding: 8px 12px;
-    flex: 1;
-    min-width: calc(33.333% - 6px);
+    font-size: 11px;
+    padding: 7px 10px;
+    flex: 0 1 calc(33.333% - 4px);
   }
 
   .ride-card {
     padding: 12px;
+    margin-bottom: 4px;
   }
 
   .ride-card-header {
-    gap: 12px;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   .driver-avatar-lg {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     font-size: 16px;
   }
 
   .driver-name {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .driver-role {
+    font-size: 10px;
+  }
+
+  .ride-date-time {
+    padding: 10px;
+    font-size: 13px;
   }
 
   .ride-locations {
-    padding: 12px;
+    padding: 10px;
     gap: 10px;
   }
 
+  .location-address {
+    font-size: 13px;
+  }
+
+  .info-item {
+    gap: 6px;
+  }
+
   .rides-empty-state {
-    padding: 40px 20px;
+    padding: 40px 15px;
   }
 
   .rides-empty-state h3 {
+    font-size: 16px;
+  }
+
+  .rides-empty-state p {
+    font-size: 13px;
+  }
+
+  .stat-box {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .stat-value {
     font-size: 18px;
+  }
+
+  .stat-label {
+    font-size: 10px;
   }
 }
 
