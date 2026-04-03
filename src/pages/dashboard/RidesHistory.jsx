@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useOutletContext } from 'react-router-dom'
 import { apiUrl } from '../../lib/api'
 import { MapPin, Calendar, Clock, DollarSign, CheckCircle, XCircle, Bike, Phone, Navigation, Star } from 'lucide-react'
 import '../../styles/rideshistory.css'
 import '../../styles/homedashboard.css'
 
 export default function RidesHistory(){
+  const { collapsed } = useOutletContext() || { collapsed: false }
   const [rides, setRides] = useState([])
   const [filteredRides, setFilteredRides] = useState([])
   const [filter, setFilter] = useState('completed') // all, completed, cancelled
@@ -99,7 +101,7 @@ export default function RidesHistory(){
   return (
     <>
       {/* Rides History Header */}
-      <div className="rides-page-header">
+      <div className={`rides-page-header ${collapsed ? 'sidebar-collapsed' : ''}`}>
         <div className="rides-header-content">
           <div className="rides-header-top">
             <div>
@@ -120,7 +122,7 @@ export default function RidesHistory(){
       </div>
 
       {/* Rides History Content */}
-      <div className="rides-page-wrapper">
+      <div className={`rides-page-wrapper ${collapsed ? 'sidebar-collapsed' : ''}`}>
         <div className="rides-page">
           <div className="rides-filters-section">
             <div className="rides-filter-header">

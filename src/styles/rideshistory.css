@@ -1,9 +1,15 @@
 /* Rides History Page Header */
 .rides-page-header {
+  margin-left: 300px;
+  transition: margin-left 180ms ease;
   background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
   padding: 2rem;
   border-bottom: 2px solid #146f05;
   margin-bottom: 1.5rem;
+}
+
+.rides-page-header.sidebar-collapsed {
+  margin-left: 96px;
 }
 
 .rides-header-content {
@@ -66,9 +72,15 @@
 
 /* Rides Page Wrapper */
 .rides-page-wrapper {
+  margin-left: 300px;
   padding: 1.5rem 2rem;
   background: #f8fafc;
   min-height: calc(100vh - 300px);
+  transition: margin-left 180ms ease;
+}
+
+.rides-page-wrapper.sidebar-collapsed {
+  margin-left: 96px;
 }
 
 /* Rides Page */
