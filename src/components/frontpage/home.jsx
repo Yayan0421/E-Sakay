@@ -5,39 +5,82 @@ import cp from '../../assets/cp.png'
 
 const Home = () => {
   return (
-    <div className="home-page">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
       <Navbar />
 
-      {/* Hero Section */}
-      <main className="hero">
-        <div className="hero-left">
-          <h1 className="hero-title">Ride the <span className="accent">Future</span> with <span className="accent-green">E-Sakay</span></h1>
-          <p className="hero-desc">Your reliable transportation solution. Book motorcycles and tricycles, track your driver in real-time, and get where you need to go safely.</p>
+      {/* Hero Section - Mobile First */}
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto">
+          {/* Hero Grid - Stack on mobile, side-by-side on desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+            
+            {/* Hero Left Content */}
+            <div className="flex flex-col justify-center">
+              {/* Title - Responsive sizing */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 mb-4 sm:mb-6">
+                Ride the <span className="text-emerald-600">Future</span> with <span className="text-emerald-600">E-Sakay</span>
+              </h1>
+              
+              {/* Description - Responsive text size */}
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-xl">
+                Your reliable transportation solution. Book motorcycles and tricycles, track your driver in real-time, and get where you need to go safely.
+              </p>
 
-          <div className="hero-actions">
-            <Link to="/login" className="btn-primary">Log In</Link>
-            <Link to="/signup" className="btn-primary">Sign Up</Link>
-          </div>
+              {/* CTA Buttons - Full width on mobile, auto on desktop */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
+                <Link 
+                  to="/login" 
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-center"
+                >
+                  Log In
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-bold rounded-full shadow-md hover:shadow-lg transition-all duration-200 text-center"
+                >
+                  Sign Up
+                </Link>
+              </div>
 
-          <div className="hero-stats">
-            <div className="stat-item">
-              <div className="stat-value">50K+</div>
-              <div className="stat-label">Active Users</div>
+              {/* Stats - Responsive grid */}
+              <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                <div className="text-center sm:text-left">
+                  <div className="text-2xl sm:text-3xl font-bold text-emerald-600">50K+</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">Active Users</div>
+                </div>
+                <div className="text-center sm:text-left">
+                  <div className="text-2xl sm:text-3xl font-bold text-emerald-600">100K+</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">Rides Completed</div>
+                </div>
+                <div className="text-center sm:text-left">
+                  <div className="text-2xl sm:text-3xl font-bold text-emerald-600">4.8★</div>
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">Avg Rating</div>
+                </div>
+              </div>
             </div>
-            <div className="stat-item">
-              <div className="stat-value">100K+</div>
-              <div className="stat-label">Rides Completed</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">4.8★</div>
-              <div className="stat-label">Average Rating</div>
-            </div>
-          </div>
-        </div>
 
-        <div className="hero-right">
-          <div className="vehicle">
-            <img src={cp} alt="E-Sakay App" className="vehicle-img" />
+            {/* Hero Right - Image */}
+            <div className="hidden lg:flex justify-center items-center">
+              <div className="w-full max-w-sm lg:max-w-none">
+                <img 
+                  src={cp} 
+                  alt="E-Sakay App" 
+                  className="w-full h-auto object-contain drop-shadow-2xl"
+                />
+              </div>
+            </div>
+            
+            {/* Mobile Image - Show on mobile, hide on desktop */}
+            <div className="lg:hidden flex justify-center items-center -mx-4 sm:-mx-6">
+              <div className="w-full max-w-xs">
+                <img 
+                  src={cp} 
+                  alt="E-Sakay App" 
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       </main>
