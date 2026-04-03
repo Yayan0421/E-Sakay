@@ -54,3 +54,56 @@
 .messages-page.sidebar-collapsed {
   margin-left: 96px;
 }
+
+/* MOBILE RESPONSIVE FIX */
+@media (max-width: 768px) {
+  .messages-page-header {
+    margin-left: 0 !important;
+    padding: 1.5rem 1rem;
+  }
+
+  .messages-page-wrapper {
+    margin-left: 0 !important;
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  .messages-page {
+    margin-left: 0 !important;
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  .messages-main-title {
+    font-size: 1.75rem;
+  }
+
+  .messages-tagline {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-page-header {
+    padding: 1rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .messages-
+header-content {
+    max-width: 100%;
+  }
+
+  .messages-main-title {
+    font-size: 1.5rem;
+  }
+
+  .messages-tagline {
+    font-size: 0.875rem;
+  }
+
+  .messages-page-wrapper,
+  .messages-page {
+    padding: 0.75rem;
+  }
+}

@@ -623,12 +623,12 @@ input:checked + .slider:before {
 
 @media (max-width: 768px) {
   .profile-page-header {
-    margin-left: 96px;
+    margin-left: 0 !important;
     padding: 1.5rem 1rem;
   }
 
   .profile-page-container {
-    margin-left: 96px;
+    margin-left: 0 !important;
     padding: 0 1rem 2rem 1rem;
   }
 
@@ -658,6 +658,83 @@ input:checked + .slider:before {
   }
 
   .profile-basic-info h2 {
+    font-size: 1.25rem;
+  }
+
+  .profile-tabs {
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+
+  .tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .profile-section {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page-header {
+    margin-left: 0 !important;
+    padding: 1rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .profile-page-container {
+    margin-left: 0 !important;
+    padding: 0 0.75rem 1.5rem 0.75rem;
+  }
+
+  .profile-main-title {
+    font-size: 1.25rem;
+  }
+
+  .back-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    width: 100%;
+  }
+
+  .profile-card {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .profile-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  .tab-button {
+    padding: 0.75rem 0.75rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .profile-section {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .security-grid,
+  .preferences-grid,
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
     font-size: 1.25rem;
   }
 
