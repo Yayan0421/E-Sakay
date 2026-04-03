@@ -27,7 +27,7 @@ export default function Profile(){
     updated_at: null
   })
 
-  const [tempProfile, setTempProfile] = useState(profile)
+  const [tempProfile, setTempProfile] = useState(null)
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -117,6 +117,13 @@ export default function Profile(){
 
     fetchProfile()
   }, [supabase])
+
+  // Sync tempProfile with profile when profile data loads
+  useEffect(() => {
+    if (profile.email && !tempProfile) {
+      setTempProfile(profile)
+    }
+  }, [profile, tempProfile])
 
   const handleSave = async () => {
     try {
@@ -231,7 +238,7 @@ export default function Profile(){
         <div className="flex flex-col md:flex-row gap-6 mb-6 items-center md:items-start">
           <div className="relative shrink-0">
             <div className="w-24 h-24 bg-linear-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
-              {tempProfile.avatar}
+              {(tempProfile || profile)?.avatar}
             </div>
           </div>
 
@@ -309,7 +316,7 @@ export default function Profile(){
                 <input
                   type="text"
                   name="name"
-                  value={tempProfile.name}
+                  value={tempProfile?.name || ''}
                   onChange={handleInputChange}
                   placeholder="Enter your full name"
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
@@ -320,7 +327,7 @@ export default function Profile(){
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
                 <input
                   type="email"
-                  value={tempProfile.email}
+                  value={tempProfile?.email || ''}
                   disabled
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-500"
                 />
@@ -333,7 +340,7 @@ export default function Profile(){
                   <input
                     type="tel"
                     name="phone"
-                    value={tempProfile.phone}
+                    value={tempProfile?.phone || ''}
                     onChange={handleInputChange}
                     placeholder="Enter your phone number"
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
@@ -345,7 +352,7 @@ export default function Profile(){
                   <input
                     type="text"
                     name="address"
-                    value={tempProfile.address}
+                    value={tempProfile?.address || ''}
                     onChange={handleInputChange}
                     placeholder="Enter your address"
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
@@ -358,7 +365,7 @@ export default function Profile(){
                 <input
                   type="url"
                   name="avatar_url"
-                  value={tempProfile.avatar_url}
+                  value={tempProfile?.avatar_url || ''}
                   onChange={handleInputChange}
                   placeholder="Enter your avatar image URL"
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
@@ -383,7 +390,7 @@ export default function Profile(){
                 <button
                   onClick={() => {
                     setIsEditing(false)
-                    setTempProfile(profile)
+                    setTempProfile(profile || null)
                   }}
                   className="flex-1 py-2 rounded-lg font-semibold text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                 >
