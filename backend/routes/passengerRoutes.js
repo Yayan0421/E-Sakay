@@ -18,14 +18,19 @@ router.post('/save', async (req, res) => {
 
     console.log('Backend: Saving passenger:', { email, name, phone, address, avatar_url })
 
-    // Check if exists
+    // Check if exists - use .maybeSingle() to avoid error on no rows
     const { data: existing, error: checkError } = await supabase
       .from('passengers')
       .select('id')
       .eq('email', email)
-      .single()
+      .maybeSingle()
 
-    console.log('Backend: Existing check result:', existing, checkError)
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Backend: Error checking passenger existence:', checkError)
+      return res.status(400).json({ error: 'Failed to check passenger: ' + checkError.message })
+    }
+
+    console.log('Backend: Existing check result:', existing, checkError?.code)
 
     let result
 
@@ -44,8 +49,8 @@ router.post('/save', async (req, res) => {
         .eq('id', existing.id)
         .select()
     } else {
-      // Insert new record - must have password
-      console.log('Backend: Inserting new passenger')
+      // Insert new record - generate default password for new users
+      console.log('Backend: Inserting new passenger with default password')
       result = await supabase
         .from('passengers')
         .insert({
@@ -54,7 +59,7 @@ router.post('/save', async (req, res) => {
           phone: phone || null,
           address: address || null,
           avatar_url: avatar_url || null,
-          password: 'default_password_' + Date.now(), // Generate a default password
+          password: 'default_' + Date.now(), // Generate unique default password
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
