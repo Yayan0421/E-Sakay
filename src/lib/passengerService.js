@@ -173,34 +173,57 @@ export const savePassengerProfile = async (passengerData) => {
     }
 
     console.log('🔍 DEBUG: Attempting to save passenger:', passengerData)
-    console.log('🔍 DEBUG: Supabase URL:', import.meta.env.VITE_SUPABASE_URL)
-    console.log('🔍 DEBUG: Has Auth Key:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
 
-    const savePayload = {
-      ...passengerData,
-      updated_at: new Date().toISOString()
-    }
-    
-    console.log('🔍 DEBUG: Payload to send:', savePayload)
-
-    const { data, error } = await supabase
+    // First, try to find existing record
+    console.log('🔍 DEBUG: Checking if passenger exists...')
+    const { data: existing, error: checkError } = await supabase
       .from('passengers')
-      .upsert(savePayload, { onConflict: 'email' })
-      .select()
+      .select('id')
+      .eq('email', passengerData.email)
+      .single()
 
-    console.log('🔍 DEBUG: Upsert response received')
-    console.log('🔍 DEBUG: Error:', error)
-    console.log('🔍 DEBUG: Data:', data)
+    console.log('🔍 DEBUG: Existing check - Error:', checkError, 'Data:', existing)
+
+    let data, error
+    
+    if (existing?.id) {
+      // Record exists - update it
+      console.log('🔍 DEBUG: Updating existing passenger:', existing.id)
+      const result = await supabase
+        .from('passengers')
+        .update({
+          ...passengerData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', existing.id)
+        .select()
+      
+      data = result.data
+      error = result.error
+    } else {
+      // Record doesn't exist - insert new one
+      console.log('🔍 DEBUG: Inserting new passenger')
+      const result = await supabase
+        .from('passengers')
+        .insert({
+          ...passengerData,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+      
+      data = result.data
+      error = result.error
+    }
+
+    console.log('🔍 DEBUG: Operation response - Error:', error, 'Data:', data)
 
     if (error) {
-      // Log full error object
       console.error('❌ FULL ERROR OBJECT:', JSON.stringify(error, null, 2))
-      
       throw new Error(`Failed to save profile: ${error.message || 'Unknown error'}`)
     }
 
     console.log('✅ Profile saved successfully:', data)
-    return data[0] || null
+    return data?.[0] || null
   } catch (err) {
     console.error('❌ Error in savePassengerProfile:', err)
     console.error('❌ Error stack:', err.stack)
