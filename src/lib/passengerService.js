@@ -6,7 +6,18 @@ console.log('Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    },
+    global: {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  }
 )
 
 console.log('Supabase client initialized:', !!supabase)
