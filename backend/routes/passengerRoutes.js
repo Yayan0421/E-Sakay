@@ -132,21 +132,29 @@ router.get('/by-email/:email', async (req, res) => {
  */
 router.post('/upload-avatar', upload.single('file'), async (req, res) => {
   try {
+    console.log('🏁 Backend: Avatar upload request started')
+    
     if (!req.file) {
+      console.error('❌ Backend: No file in request')
       return res.status(400).json({ error: 'No file uploaded' })
     }
 
     const { email } = req.body
 
     if (!email) {
+      console.error('❌ Backend: No email provided')
       return res.status(400).json({ error: 'Email is required' })
     }
 
-    console.log('Backend: Uploading avatar for:', email)
+    console.log('🟢 Backend: Uploading avatar for:', email)
+    console.log('📄 Backend: File:', req.file.originalname, 'Size:', req.file.size, 'MIME:', req.file.mimetype)
 
     // Generate unique filename
     const timestamp = Date.now()
-    const filename = `avatars/${email}-${timestamp}.${req.file.mimetype.split('/')[1]}`
+    const fileExtension = req.file.mimetype.split('/')[1] || 'jpg'
+    const filename = `avatars/${email}-${timestamp}.${fileExtension}`
+
+    console.log('📝 Backend: Target filename:', filename)
 
     // Upload to Supabase storage
     const { data, error: uploadError } = await supabase.storage
@@ -157,18 +165,28 @@ router.post('/upload-avatar', upload.single('file'), async (req, res) => {
       })
 
     if (uploadError) {
-      console.error('Backend: Storage upload error:', uploadError)
+      console.error('❌ Backend: Storage upload FAILED:', uploadError)
+      console.error('   Error message:', uploadError.message)
+      console.error('   Error status:', uploadError.status)
+      
+      // Check if bucket doesn't exist
+      if (uploadError.message?.includes('not found') || uploadError.status === 404) {
+        return res.status(400).json({ 
+          error: 'Storage bucket "passenger-avatars" not found. Create it in Supabase → Storage' 
+        })
+      }
+      
       return res.status(400).json({ error: 'Failed to upload file: ' + uploadError.message })
     }
 
-    console.log('Backend: File uploaded successfully:', data)
+    console.log('✅ Backend: File uploaded successfully to storage')
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
       .from('passenger-avatars')
       .getPublicUrl(filename)
 
-    console.log('Backend: Public URL:', publicUrl)
+    console.log('🔗 Backend: Public URL:', publicUrl)
 
     // Update passenger record with avatar URL
     const { data: existing, error: checkError } = await supabase
@@ -178,8 +196,11 @@ router.post('/upload-avatar', upload.single('file'), async (req, res) => {
       .maybeSingle()
 
     if (checkError && checkError.code !== 'PGRST116') {
+      console.error('❌ Backend: Error checking passenger:', checkError)
       return res.status(400).json({ error: 'Failed to check passenger: ' + checkError.message })
     }
+
+    console.log('🔍 Backend: Passenger exists?', existing ? 'YES (ID: ' + existing.id + ')' : 'NO')
 
     if (existing?.id) {
       const { data: updateData, error: updateError } = await supabase
@@ -205,12 +226,32 @@ router.post('/upload-avatar', upload.single('file'), async (req, res) => {
         message: 'Avatar successfully uploaded and saved to database'
       })
     } else {
-      // If passenger doesn't exist yet, just return the URL
-      console.log('Backend: Passenger does not exist yet. Avatar will be saved when profile is created.')
+      // If passenger doesn't exist yet, create one with avatar
+      console.log('Backend: Passenger does not exist. Creating new passenger record with avatar.')
+      
+      const { data: newPassenger, error: insertError } = await supabase
+        .from('passengers')
+        .insert({
+          email,
+          name: email.split('@')[0], // Use part of email as default name
+          avatar_url: publicUrl,
+          password: 'default_' + Date.now(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+
+      if (insertError) {
+        console.error('Backend: Insert passenger error:', insertError)
+        return res.status(400).json({ error: 'Failed to create passenger: ' + insertError.message })
+      }
+
+      console.log('Backend: New passenger created with avatar:', newPassenger?.[0])
       res.json({ 
         success: true, 
         avatar_url: publicUrl, 
-        message: 'Avatar uploaded. Please save profile to persist to database.' 
+        data: newPassenger?.[0] || null,
+        message: 'Avatar successfully uploaded and new passenger record created'
       })
     }
   } catch (err) {
