@@ -29,38 +29,34 @@ export default function Dashboard(){
 	}, [paymentStatus, clearPaymentStatus])
 
 	return (
-		<div style={{display:'flex', minHeight:'100vh', flexDirection:'column'}}>
+		<div className="flex flex-col min-h-screen bg-gray-50">
+			{/* Payment Verification Modal */}
 			{isChecking && (
-				<div style={{
-					position: 'fixed',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					background: 'rgba(0,0,0,0.5)',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					zIndex: 9999
-				}}>
-					<div style={{
-						background: '#fff',
-						padding: '24px',
-						borderRadius: '12px',
-						textAlign: 'center'
-					}}>
-						<div style={{ fontSize: 24, marginBottom: 16 }}>⏳</div>
-						<p>Verifying payment...</p>
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+					<div className="bg-white rounded-2xl p-8 text-center shadow-xl">
+						<div className="text-4xl mb-4">⏳</div>
+						<p className="text-gray-700 font-medium">Verifying payment...</p>
 					</div>
 				</div>
 			)}
-			<div style={{display:'flex', flex:1}}>
-				<Sidenavbar collapsed={collapsed} setCollapsed={setCollapsed} />
-			<main style={{flex:1, padding:24, transition: 'all 0.3s ease-in-out', overflow: 'auto'}}>
+
+			{/* Main Dashboard Layout */}
+			<div className="flex flex-1 flex-col lg:flex-row">
+				{/* Sidebar - Hidden on mobile, visible on desktop */}
+				<div className="hidden lg:block">
+					<Sidenavbar collapsed={collapsed} setCollapsed={setCollapsed} />
+				</div>
+
+				{/* Main Content */}
+				<main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 overflow-auto transition-all duration-300 ease-in-out">
 					<Outlet context={{collapsed}} />
 				</main>
 			</div>
-			<DashboardFooter />
+
+			{/* Dashboard Footer */}
+			<div className="mt-auto w-full bg-white border-t border-gray-200">
+				<DashboardFooter />
+			</div>
 		</div>
 	)
 }
