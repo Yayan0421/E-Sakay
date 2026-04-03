@@ -10,7 +10,7 @@
 
 /* Why Ride With Us Section */
 .why-ride-section {
- margin-top: 50px;
+  margin-top: 50px;
   margin-left: 300px;
   transition: margin-left 180ms ease;
   min-height: auto;
@@ -31,6 +31,7 @@
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 0.5rem;
+  line-height: 1.2;
 }
 
 .why-ride-subtitle {
@@ -90,7 +91,7 @@
   margin: 0;
 }
 
-/* Responsive Design */
+/* Responsive Design - Large Screens (1200px+) */
 @media (max-width: 1200px) {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -98,6 +99,7 @@
   }
 }
 
+/* Responsive Design - Tablets (768px - 1199px) */
 @media (max-width: 768px) {
   .features-grid {
     grid-template-columns: 1fr;
@@ -114,5 +116,106 @@
 
   .why-ride-title {
     font-size: 1.75rem;
+  }
+}
+
+/* Responsive Design - Mobile (480px - 767px) */
+@media (max-width: 767px) {
+  .why-ride-section {
+    margin-left: 0;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+  }
+
+  .why-ride-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .why-ride-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .why-ride-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem 1rem;
+    border-radius: 6px;
+  }
+
+  .feature-icon {
+    height: 40px;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-description {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive Design - Small Mobile (< 480px) */
+@media (max-width: 479px) {
+  .why-ride-section {
+    margin-left: 0;
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+  }
+
+  .why-ride-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .why-ride-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .why-ride-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .feature-card {
+    padding: 1rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  .feature-icon {
+    height: 35px;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+  }
+
+  .feature-description {
+    font-size: 0.75rem;
+    line-height: 1.3;
   }
 }
