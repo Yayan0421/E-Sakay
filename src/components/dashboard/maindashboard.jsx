@@ -4,7 +4,6 @@ import { useOutletContext, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import PaymentModal from './PaymentModal';
 import { apiUrl } from '../../lib/api';
-import '../../styles/homedashboard.css';
 
 export default function MainDashboard() {
   const { collapsed } = useOutletContext() || { collapsed: false };

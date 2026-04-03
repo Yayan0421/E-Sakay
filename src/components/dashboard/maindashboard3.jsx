@@ -1,6 +1,5 @@
 import { useOutletContext } from "react-router-dom";
 import { Bike, Shield, Clock, Headphones } from "lucide-react";
-import "../../styles/maindashboard3.css";
 
 const features = [
   {

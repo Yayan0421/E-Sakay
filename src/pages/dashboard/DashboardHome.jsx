@@ -3,7 +3,6 @@ import MainDashboard from '../../components/dashboard/maindashboard'
 import MainDashboard2 from '../../components/dashboard/maindashboard2'
 import MainDashboard3 from '../../components/dashboard/maindashboard3'
 import DashboardFooter from '../../components/dashboard/dashboardfooter'
-import '../../styles/homedashboard.css'
 
 export default function DashboardHome(){
   return (

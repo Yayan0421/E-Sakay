@@ -3,7 +3,6 @@ import { useOutletContext } from 'react-router-dom'
 import { HelpCircle, Mail, MessageSquare, Phone, Clock, Search, ChevronDown } from 'lucide-react'
 import Swal from 'sweetalert2'
 import { apiUrl } from '../../lib/api'
-import '../../styles/support.css'
 
 export default function Support(){
   const { collapsed } = useOutletContext() || { collapsed: false }

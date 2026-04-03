@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import L from 'leaflet'
 import { Phone, MessageCircle, X, MapPin, Clock, Navigation2 } from 'lucide-react'
 import { useOutletContext } from 'react-router-dom'
-import '../../styles/tracking.css'
 
 // Custom marker icons
 const pickupIcon = L.icon({

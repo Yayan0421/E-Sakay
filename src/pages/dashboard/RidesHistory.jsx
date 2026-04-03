@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { apiUrl } from '../../lib/api'
-import '../../styles/rideshistory.css'
-import '../../styles/homedashboard.css'
 
 export default function RidesHistory(){
   const { collapsed } = useOutletContext() || { collapsed: false }
