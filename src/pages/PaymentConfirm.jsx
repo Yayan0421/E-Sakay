@@ -37,6 +37,7 @@ export default function PaymentConfirm() {
           text: 'Your payment has been successfully processed.',
           confirmButtonColor: '#0ea5a4'
         }).then(() => {
+          // Redirect to dashboard home
           window.location.href = '/dashboard'
         })
       } else {
@@ -60,47 +61,84 @@ export default function PaymentConfirm() {
   }
   
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-6 sm:px-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-6 sm:p-8 text-center">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      background: '#f9fafb',
+      padding: '20px'
+    }}>
+      <div style={{
+        background: '#fff',
+        borderRadius: '12px',
+        padding: '40px',
+        maxWidth: '500px',
+        width: '100%',
+        textAlign: 'center',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '20px' }}>💳</div>
         
-        {/* Icon */}
-        <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">💳</div>
-        
-        {/* Heading */}
-        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mb-3 sm:mb-4">
+        <h1 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '16px' }}>
           Payment Processing
         </h1>
         
-        {/* Description */}
-        <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+        <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '24px' }}>
           Did you complete your GCash payment on PayMongo?
         </p>
         
-        {/* Transaction ID */}
         {transactionId && (
-          <div className="bg-gray-100 px-4 py-3 sm:px-6 sm:py-4 rounded-xl mb-6 sm:mb-8 break-all">
-            <p className="text-xs sm:text-sm text-gray-600 font-mono">
-              {transactionId}
-            </p>
+          <div style={{
+            background: '#f3f4f6',
+            padding: '12px',
+            borderRadius: '8px',
+            marginBottom: '24px',
+            fontSize: '12px',
+            color: '#6b7280',
+            wordBreak: 'break-all'
+          }}>
+            <strong>Transaction ID:</strong> {transactionId}
           </div>
         )}
         
-        {/* Buttons */}
-        <div className="flex flex-col gap-3 sm:gap-4">
-          <button
-            onClick={handleManualConfirm}
-            disabled={isConfirming}
-            className="w-full px-6 py-3 sm:py-4 bg-teal-500 text-white font-bold text-sm sm:text-base rounded-xl hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
-          >
-            {isConfirming ? '⏳ Confirming...' : '✅ Confirm Payment'}
-          </button>
-          <a
-            href="/dashboard"
-            className="w-full px-6 py-3 sm:py-4 bg-gray-200 text-gray-900 font-bold text-sm sm:text-base rounded-xl hover:bg-gray-300 transition-colors"
-          >
-            Back to Dashboard
-          </a>
-        </div>
+        <button
+          onClick={handleManualConfirm}
+          disabled={isConfirming || !transactionId}
+          style={{
+            width: '100%',
+            padding: '12px',
+            background: '#0ea5a4',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            opacity: isConfirming || !transactionId ? 0.6 : 1,
+            marginBottom: '12px'
+          }}
+        >
+          {isConfirming ? 'Confirming...' : 'Confirm & Go to Dashboard'}
+        </button>
+        
+        <button
+          onClick={() => window.location.href = '/dashboard'}
+          style={{
+            width: '100%',
+            padding: '12px',
+            background: '#e5e7eb',
+            color: '#6b7280',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '16px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          Back to Dashboard
+        </button>
       </div>
     </div>
   )
