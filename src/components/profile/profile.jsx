@@ -109,7 +109,7 @@ export default function Profile(){
         }
       } catch (err) {
         console.error('Error fetching profile:', err)
-        setError(err.message)
+        setError(err.message || 'Failed to load profile')
       } finally {
         setLoading(false)
       }

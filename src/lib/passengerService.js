@@ -12,17 +12,32 @@ const supabase = createClient(
  */
 export const getPassengerByEmail = async (email) => {
   try {
+    if (!email) {
+      console.warn('No email provided to getPassengerByEmail')
+      return null
+    }
+
     const { data, error } = await supabase
       .from('passengers')
       .select('*')
       .eq('email', email)
       .single()
 
-    if (error && error.code !== 'PGRST116') throw error
+    if (error) {
+      // PGRST116 = no rows found, which is ok
+      if (error.code === 'PGRST116') {
+        console.log('No passenger found for email:', email)
+        return null
+      }
+      // Other errors should be logged but not thrown
+      console.warn('Error querying passenger by email:', error)
+      return null
+    }
+
     return data || null
   } catch (err) {
-    console.error('Error fetching passenger by email:', err)
-    throw err
+    console.error('Unexpected error fetching passenger by email:', err)
+    return null
   }
 }
 
@@ -33,17 +48,31 @@ export const getPassengerByEmail = async (email) => {
  */
 export const getPassengerById = async (id) => {
   try {
+    if (!id) {
+      console.warn('No ID provided to getPassengerById')
+      return null
+    }
+
     const { data, error } = await supabase
       .from('passengers')
       .select('*')
       .eq('id', id)
       .single()
 
-    if (error && error.code !== 'PGRST116') throw error
+    if (error) {
+      // PGRST116 = no rows found, which is ok
+      if (error.code === 'PGRST116') {
+        console.log('No passenger found for ID:', id)
+        return null
+      }
+      console.warn('Error querying passenger by ID:', error)
+      return null
+    }
+
     return data || null
   } catch (err) {
-    console.error('Error fetching passenger by ID:', err)
-    throw err
+    console.error('Unexpected error fetching passenger by ID:', err)
+    return null
   }
 }
 
@@ -54,16 +83,24 @@ export const getPassengerById = async (id) => {
  */
 export const searchPassengers = async (searchTerm) => {
   try {
+    if (!searchTerm || searchTerm.trim() === '') {
+      return []
+    }
+
     const { data, error } = await supabase
       .from('passengers')
-      .select('id, name, email, phone, address, avatar_url, created_at')
+      .select('id, name, email, phone, address, avatar_url, created_at, updated_at')
       .or(`name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`)
 
-    if (error) throw error
+    if (error) {
+      console.warn('Error searching passengers:', error)
+      return []
+    }
+
     return data || []
   } catch (err) {
-    console.error('Error searching passengers:', err)
-    throw err
+    console.error('Unexpected error searching passengers:', err)
+    return []
   }
 }
 
@@ -78,17 +115,21 @@ export const getAllPassengers = async (page = 1, limit = 10) => {
     const start = (page - 1) * limit
     const end = start + limit - 1
 
-    const { data, error, count } = await supabase
+    const { data: passengers, error, count } = await supabase
       .from('passengers')
       .select('id, name, email, phone, address, avatar_url, created_at, updated_at', { count: 'exact' })
       .range(start, end)
       .order('created_at', { ascending: false })
 
-    if (error) throw error
-    return { data: data || [], count: count || 0, page, limit }
+    if (error) {
+      console.warn('Error fetching passengers:', error)
+      return { data: [], count: 0, page, limit }
+    }
+
+    return { data: passengers || [], count: count || 0, page, limit }
   } catch (err) {
-    console.error('Error fetching passengers:', err)
-    throw err
+    console.error('Unexpected error fetching passengers:', err)
+    return { data: [], count: 0, page, limit }
   }
 }
 
@@ -99,6 +140,10 @@ export const getAllPassengers = async (page = 1, limit = 10) => {
  */
 export const savePassengerProfile = async (passengerData) => {
   try {
+    if (!passengerData || !passengerData.email) {
+      throw new Error('Email is required to save profile')
+    }
+
     const { data, error } = await supabase
       .from('passengers')
       .upsert({
@@ -107,11 +152,16 @@ export const savePassengerProfile = async (passengerData) => {
       }, { onConflict: 'email' })
       .select()
 
-    if (error) throw error
+    if (error) {
+      console.error('Error saving passenger profile:', error)
+      throw new Error(`Failed to save profile: ${error.message}`)
+    }
+
     console.log('Profile saved successfully:', data)
     return data[0] || null
   } catch (err) {
-    console.error('Error saving passenger profile:', err)
+    console.error('Error in savePassengerProfile:', err)
+    // Re-throw for the component to handle
     throw err
   }
 }
@@ -123,16 +173,24 @@ export const savePassengerProfile = async (passengerData) => {
  */
 export const deletePassenger = async (id) => {
   try {
+    if (!id) {
+      throw new Error('Passenger ID is required to delete')
+    }
+
     const { error } = await supabase
       .from('passengers')
       .delete()
       .eq('id', id)
 
-    if (error) throw error
+    if (error) {
+      console.error('Error deleting passenger:', error)
+      throw new Error(`Failed to delete passenger: ${error.message}`)
+    }
+
     console.log('Passenger deleted successfully')
     return true
   } catch (err) {
-    console.error('Error deleting passenger:', err)
+    console.error('Error in deletePassenger:', err)
     throw err
   }
 }
@@ -147,20 +205,29 @@ export const getPassengerStats = async () => {
       .from('passengers')
       .select('id', { count: 'exact' })
 
-    if (error) throw error
+    if (error) {
+      console.warn('Error fetching total passengers count:', error)
+    }
 
-    const { data: weeklyData } = await supabase
+    const { data: weeklyData, error: weeklyError } = await supabase
       .from('passengers')
       .select('created_at')
       .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+
+    if (weeklyError) {
+      console.warn('Error fetching weekly stats:', weeklyError)
+    }
 
     return {
       totalPassengers: count || 0,
       newThisWeek: weeklyData?.length || 0
     }
   } catch (err) {
-    console.error('Error fetching stats:', err)
-    throw err
+    console.error('Unexpected error in getPassengerStats:', err)
+    return {
+      totalPassengers: 0,
+      newThisWeek: 0
+    }
   }
 }
 
