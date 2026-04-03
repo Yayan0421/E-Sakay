@@ -15,11 +15,15 @@ export default function Profile(){
   const [error, setError] = useState(null)
   
   const [profile, setProfile] = useState({
+    id: null,
     name: '',
     email: '',
     phone: '',
     address: '',
-    avatar: 'P'
+    avatar_url: '',
+    avatar: 'P',
+    created_at: null,
+    updated_at: null
   })
 
   const [tempProfile, setTempProfile] = useState(profile)
@@ -37,25 +41,33 @@ export default function Profile(){
           return
         }
 
-        const { data, error: fetchError } = await supabase
+        // Try to fetch by user.id first, then by email
+        let { data, error: fetchError } = await supabase
           .from('passengers')
           .select('*')
-          .eq('id', user.id)
+          .eq('email', user.email)
           .single()
 
-        if (fetchError && fetchError.code !== 'PGRST116') throw fetchError
+        if (fetchError && fetchError.code !== 'PGRST116') {
+          console.warn('Error fetching by email:', fetchError)
+        }
 
         if (data) {
           const profileData = {
+            id: data.id,
             name: data.name || '',
             email: data.email || '',
             phone: data.phone || '',
             address: data.address || '',
-            avatar: (data.name || 'P').charAt(0).toUpperCase()
+            avatar_url: data.avatar_url || '',
+            avatar: (data.name || 'P').charAt(0).toUpperCase(),
+            created_at: data.created_at,
+            updated_at: data.updated_at
           }
           setProfile(profileData)
           setTempProfile(profileData)
         } else {
+          // Fallback to localStorage
           const userData = localStorage.getItem('user')
           if (userData) {
             const user = JSON.parse(userData)
@@ -90,13 +102,14 @@ export default function Profile(){
       const { error: updateError } = await supabase
         .from('passengers')
         .upsert({
-          id: user.id,
-          name: tempProfile.name,
+          id: profile.id || undefined,
           email: tempProfile.email,
+          name: tempProfile.name,
           phone: tempProfile.phone,
           address: tempProfile.address,
-          updated_at: new Date()
-        }, { onConflict: 'id' })
+          avatar_url: tempProfile.avatar_url,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'email' })
 
       if (updateError) throw updateError
 
@@ -283,6 +296,19 @@ export default function Profile(){
                 </div>
               </div>
 
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Avatar URL</label>
+                <input
+                  type="url"
+                  name="avatar_url"
+                  value={tempProfile.avatar_url}
+                  onChange={handleInputChange}
+                  placeholder="Enter your avatar image URL"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                />
+                <p className="text-xs text-gray-500 mt-1">Link to your profile picture</p>
+              </div>
+
               {/* Action Buttons */}
               <div className="flex gap-3 pt-4">
                 <button
@@ -340,6 +366,24 @@ export default function Profile(){
                 <div>
                   <p className="text-xs text-gray-500 font-semibold">Address</p>
                   <p className="text-gray-900 font-medium">{profile.address || 'Not Set'}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 py-3 border-t border-gray-200 mt-4 pt-4">
+                <div className="text-xs text-gray-500">
+                  <p className="font-semibold mb-1">Account Created</p>
+                  <p className="text-gray-600">
+                    {profile.created_at ? new Date(profile.created_at).toLocaleDateString() : 'Not available'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 py-3">
+                <div className="text-xs text-gray-500">
+                  <p className="font-semibold mb-1">Last Updated</p>
+                  <p className="text-gray-600">
+                    {profile.updated_at ? new Date(profile.updated_at).toLocaleDateString() : 'Not available'}
+                  </p>
                 </div>
               </div>
             </div>
