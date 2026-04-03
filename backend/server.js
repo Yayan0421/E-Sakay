@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
 const authRoutes = require('./routes/supabaseAuthRoutes');
 const messagesRoutes = require('./routes/messagesRoutes');
 const bookingsRoutes = require('./routes/bookingsRoutes');
@@ -46,6 +47,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
 // Routes

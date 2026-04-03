@@ -33,6 +33,9 @@ export default function Profile(){
   })
 
   const [tempProfile, setTempProfile] = useState(null)
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [filePreview, setFilePreview] = useState(null)
+  const [uploadingFile, setUploadingFile] = useState(false)
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -216,6 +219,101 @@ export default function Profile(){
     }))
   }
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      Swal.fire({
+        icon: 'error',
+        title: 'File Too Large',
+        text: 'File size must be less than 5MB',
+        confirmButtonColor: '#0ea5a4'
+      })
+      return
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid File Type',
+        text: 'Only JPEG, PNG, GIF, and WebP images are allowed',
+        confirmButtonColor: '#0ea5a4'
+      })
+      return
+    }
+
+    setSelectedFile(file)
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      setFilePreview(event.target?.result)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const uploadAvatar = async () => {
+    if (!selectedFile || !profile.email) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please select a file and ensure you are logged in',
+        confirmButtonColor: '#0ea5a4'
+      })
+      return
+    }
+
+    try {
+      setUploadingFile(true)
+      const formData = new FormData()
+      formData.append('file', selectedFile)
+      formData.append('email', profile.email)
+
+      const response = await fetch(apiUrl('/api/passengers/upload-avatar'), {
+        method: 'POST',
+        body: formData
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to upload avatar')
+      }
+
+      // Update temp profile with new avatar URL
+      setTempProfile(prev => ({
+        ...prev,
+        avatar_url: result.avatar_url
+      }))
+
+      // Clear selected file
+      setSelectedFile(null)
+      setFilePreview(null)
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Avatar Uploaded',
+        text: 'Your profile picture has been uploaded successfully',
+        confirmButtonColor: '#0ea5a4',
+        timer: 2000
+      })
+    } catch (err) {
+      console.error('Error uploading avatar:', err)
+      Swal.fire({
+        icon: 'error',
+        title: 'Upload Failed',
+        text: err.message || 'Failed to upload avatar',
+        confirmButtonColor: '#0ea5a4'
+      })
+    } finally {
+      setUploadingFile(false)
+    }
+  }
+
   const handleLogout = async () => {
     try {
       // Confirm logout
@@ -284,9 +382,35 @@ export default function Profile(){
         {/* Avatar Section */}
         <div className="flex flex-col md:flex-row gap-6 mb-6 items-center md:items-start">
           <div className="relative shrink-0">
-            <div className="w-24 h-24 bg-linear-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
-              {(tempProfile || profile)?.avatar}
-            </div>
+            {filePreview ? (
+              <img 
+                src={filePreview} 
+                alt="Preview"
+                className="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-teal-100"
+              />
+            ) : tempProfile?.avatar_url ? (
+              <img 
+                src={tempProfile.avatar_url} 
+                alt="Avatar"
+                className="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-teal-100"
+              />
+            ) : (
+              <div className="w-24 h-24 bg-linear-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                {(tempProfile || profile)?.avatar}
+              </div>
+            )}
+            {isEditing && (
+              <label className="absolute bottom-0 right-0 bg-teal-500 p-2 rounded-full cursor-pointer hover:bg-teal-600 transition-colors shadow-md">
+                <Camera size={16} className="text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                  disabled={uploadingFile}
+                />
+              </label>
+            )}
           </div>
 
           {/* Profile Info */}
@@ -417,16 +541,51 @@ export default function Profile(){
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Avatar URL</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Picture</label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-teal-500 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    disabled={uploadingFile}
+                    className="hidden"
+                    id="file-input"
+                  />
+                  <label htmlFor="file-input" className="cursor-pointer flex flex-col items-center gap-2">
+                    <Camera size={24} className="text-teal-500" />
+                    <span className="text-sm text-gray-600">
+                      {selectedFile ? selectedFile.name : 'Click to upload or drag and drop'}
+                    </span>
+                    <span className="text-xs text-gray-500">PNG, JPG, GIF or WebP (max 5MB)</span>
+                  </label>
+                </div>
+                {selectedFile && (
+                  <button
+                    onClick={uploadAvatar}
+                    disabled={uploadingFile}
+                    className={`mt-3 w-full py-2 rounded-lg font-medium text-white transition-all ${
+                      uploadingFile
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-teal-500 hover:bg-teal-600 active:scale-95'
+                    }`}
+                  >
+                    {uploadingFile ? 'Uploading...' : 'Upload Picture'}
+                  </button>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Avatar URL (Auto-filled)</label>
                 <input
                   type="url"
                   name="avatar_url"
                   value={tempProfile?.avatar_url || ''}
                   onChange={handleInputChange}
-                  placeholder="Enter your avatar image URL"
+                  placeholder="Avatar URL will be auto-filled after upload"
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                  readOnly
                 />
-                <p className="text-xs text-gray-500 mt-1">Link to your profile picture</p>
+                <p className="text-xs text-gray-500 mt-1">Auto-populated when you upload a picture</p>
               </div>
 
               {/* Action Buttons */}

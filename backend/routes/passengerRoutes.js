@@ -1,7 +1,22 @@
 const express = require('express')
+const multer = require('multer')
 const supabase = require('../config/supabaseClient')
 
 const router = express.Router()
+
+// Configure multer for in-memory file storage
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only image files are allowed'))
+    }
+  }
+})
 
 /**
  * Save passenger profile
@@ -106,6 +121,89 @@ router.get('/by-email/:email', async (req, res) => {
     res.json({ data: data || null })
   } catch (err) {
     console.error('Backend: Fetch passenger error:', err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+/**
+ * Upload passenger avatar
+ * POST /api/passengers/upload-avatar
+ * Body: FormData with 'file' and 'email'
+ */
+router.post('/upload-avatar', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' })
+    }
+
+    const { email } = req.body
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' })
+    }
+
+    console.log('Backend: Uploading avatar for:', email)
+
+    // Generate unique filename
+    const timestamp = Date.now()
+    const filename = `avatars/${email}-${timestamp}.${req.file.mimetype.split('/')[1]}`
+
+    // Upload to Supabase storage
+    const { data, error: uploadError } = await supabase.storage
+      .from('passenger-avatars')
+      .upload(filename, req.file.buffer, {
+        contentType: req.file.mimetype,
+        upsert: true
+      })
+
+    if (uploadError) {
+      console.error('Backend: Storage upload error:', uploadError)
+      return res.status(400).json({ error: 'Failed to upload file: ' + uploadError.message })
+    }
+
+    console.log('Backend: File uploaded successfully:', data)
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('passenger-avatars')
+      .getPublicUrl(filename)
+
+    console.log('Backend: Public URL:', publicUrl)
+
+    // Update passenger record with avatar URL
+    const { data: existing, error: checkError } = await supabase
+      .from('passengers')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle()
+
+    if (checkError && checkError.code !== 'PGRST116') {
+      return res.status(400).json({ error: 'Failed to check passenger: ' + checkError.message })
+    }
+
+    if (existing?.id) {
+      const { data: updateData, error: updateError } = await supabase
+        .from('passengers')
+        .update({
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', existing.id)
+        .select()
+
+      if (updateError) {
+        console.error('Backend: Update error:', updateError)
+        return res.status(400).json({ error: 'Failed to update avatar: ' + updateError.message })
+      }
+
+      console.log('Backend: Avatar URL saved to database:', updateData)
+      res.json({ success: true, avatar_url: publicUrl, data: updateData?.[0] || null })
+    } else {
+      // If passenger doesn't exist yet, just return the URL
+      res.json({ success: true, avatar_url: publicUrl, message: 'Avatar uploaded. Please save profile to persist.' })
+    }
+  } catch (err) {
+    console.error('Backend: Upload avatar error:', err)
     res.status(500).json({ error: err.message })
   }
 })
