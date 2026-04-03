@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { apiUrl } from '../../lib/api'
+import { MessageCircle, Send, Phone, Video, MoreVertical, Search, Clock, AlertCircle } from 'lucide-react'
 import '../../styles/messages.css'
 
-export default function Message({ collapsed = false }){
+export default function Message(){
 	const [pendingBookings, setPendingBookings] = useState([])
 	const [selectedBooking, setSelectedBooking] = useState(null)
 	const [messages, setMessages] = useState([])
@@ -119,123 +120,154 @@ export default function Message({ collapsed = false }){
 	}
 
 	return (
-		<div style={{display:'flex', height: '80vh', gap:24, transition: 'all 180ms ease'}} className={collapsed ? 'message-container-collapsed' : ''}>
-			<aside style={{width:320, background:'#f7fafc', borderRadius:8, padding:12, boxShadow:'0 2px 6px rgba(12,30,60,0.04)', border:'1px solid #eef2f7'}}>
-				<div style={{padding:'8px 6px', marginBottom: 12}}>
-					<h3 style={{margin: '0 0 8px 0', fontSize: 14, fontWeight: 600}}>Your Bookings</h3>
-					<div style={{maxHeight: 250, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4}}>
+		<div className="messages-container-wrapper">
+			{/* Left Sidebar - Bookings & Drivers */}
+			<aside className="messages-sidebar">
+				{/* Bookings List */}
+				<div className="messages-section">
+					<div className="messages-section-header">
+						<MessageCircle size={18} className="messages-section-icon" />
+						<h3 className="messages-section-title">Active Bookings</h3>
+					</div>
+					<div className="messages-bookings-list">
 						{pendingBookings.length > 0 ? pendingBookings.map(booking => (
 							<button
 								key={booking.id}
 								onClick={() => handleSelectBooking(booking)}
-								style={{
-									padding: '10px',
-									borderRadius: 6,
-									border: selectedBooking?.id === booking.id ? '2px solid #f6bc0d' : '1px solid #e6eef6',
-									background: selectedBooking?.id === booking.id ? '#fffbf0' : '#fff',
-									cursor: 'pointer',
-									textAlign: 'left',
-									fontSize: 12,
-									fontWeight: 500,
-									transition: 'all 200ms ease'
-								}}
+								className={`messages-booking-item ${selectedBooking?.id === booking.id ? 'active' : ''}`}
 							>
-								<div style={{fontWeight: 600, color: '#1f2937'}}>{booking.pickup_address?.substring(0, 20)}...</div>
-								<div style={{fontSize: 11, color: '#9ca3af', marginTop: 2}}>To: {booking.dropoff_address?.substring(0, 20)}...</div>
-								<div style={{fontSize: 10, color: '#6b7280', marginTop: 2}}>Status: {booking.status}</div>
+								<div className="booking-item-header">
+									<Clock size={14} className="booking-item-icon" />
+									<span className="booking-item-status">{booking.status}</span>
+								</div>
+								<div className="booking-item-location">
+									<div className="booking-item-from">📍 {booking.pickup_address?.substring(0, 20)}...</div>
+									<div className="booking-item-arrow">→</div>
+									<div className="booking-item-to">📍 {booking.dropoff_address?.substring(0, 20)}...</div>
+								</div>
 							</button>
 						)) : (
-							<div style={{padding: 10, color: '#9ca3af', fontSize: 13}}>No active bookings</div>
+							<div className="messages-empty-state">
+								<AlertCircle size={24} />
+								<p>No active bookings</p>
+							</div>
 						)}
 					</div>
 				</div>
-				<div style={{padding:'8px 6px'}}>
-					<h3 style={{margin: '0 0 8px 0', fontSize: 14, fontWeight: 600}}>Available Drivers</h3>
-					<ul style={{listStyle:'none', margin:0, padding:0, maxHeight: 200, overflowY: 'auto'}}>
+
+				{/* Drivers List */}
+				<div className="messages-section messages-drivers-section">
+					<div className="messages-section-header">
+						<Phone size={18} className="messages-section-icon" />
+						<h3 className="messages-section-title">Available Drivers</h3>
+					</div>
+					<ul className="messages-drivers-list">
 						{drivers.length > 0 ? drivers.slice(0, 5).map(d => (
-							<li 
-								key={d.id}
-								style={{display:'flex', alignItems:'center', gap:8, padding:'8px', borderRadius:6, fontSize: 12, color: '#6b7280'}}
-							>
-								<div style={{width:28, height:28, borderRadius:'50%', background:'#e2edf8', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize: 10}}>
+							<li key={d.id} className="messages-driver-item">
+								<div className="driver-avatar">
 									{d.name?.split(' ').map(n=>n[0]).slice(0,2).join('') || 'D'}
 								</div>
-								<span>{d.name}</span>
+								<div className="driver-info">
+									<div className="driver-name">{d.name}</div>
+									<div className="driver-status">🟢 Online</div>
+								</div>
 							</li>
-						)) : <li style={{padding: 10, color: '#9ca3af', fontSize: 13}}>No drivers available</li>}
+						)) : (
+							<li className="messages-empty-state" style={{margin: '20px 0'}}>
+								<p>No drivers available</p>
+							</li>
+						)}
 					</ul>
 				</div>
 			</aside>
 
-			<section style={{flex:1, display:'flex', flexDirection:'column', background:'#fff', borderRadius:8, boxShadow:'0 2px 8px rgba(12,30,60,0.04)', border:'1px solid #eef2f7'}}>
+			{/* Right Section - Chat Area */}
+			<section className="messages-chat-section">
 				{selectedBooking ? (
 					<>
-						<header style={{padding:16, borderBottom:'1px solid #eef2f7', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-							<div>
-								<div style={{fontWeight:700, fontSize: 16}}>Booking #{selectedBooking.id?.substring(0, 8)}</div>
-								<div style={{fontSize:13, color:'#6b7280', marginTop: 2}}>
-									From: {selectedBooking.pickup_address}
-								</div>
-								<div style={{fontSize:13, color:'#6b7280', marginTop: 2}}>
-									To: {selectedBooking.dropoff_address}
+						{/* Chat Header */}
+						<header className="messages-chat-header">
+							<div className="chat-header-content">
+								<MessageCircle size={24} className="chat-header-icon" />
+								<div>
+									<div className="chat-header-title">Booking #{selectedBooking.id?.substring(0, 8)}</div>
+									<div className="chat-header-subtitle">
+										{selectedBooking.pickup_address} → {selectedBooking.dropoff_address}
+									</div>
 								</div>
 							</div>
-							<div style={{display:'flex', gap:12}}>
-								<button style={{border:'none', background:'transparent', cursor:'pointer', fontSize: 18}}>🔍</button>
-								<button style={{border:'none', background:'transparent', cursor:'pointer', fontSize: 18}}>⚙️</button>
+							<div className="chat-header-actions">
+								<button className="chat-action-btn" title="Call driver">
+									<Phone size={18} />
+								</button>
+								<button className="chat-action-btn" title="Video call">
+									<Video size={18} />
+								</button>
+								<button className="chat-action-btn" title="More options">
+									<MoreVertical size={18} />
+								</button>
 							</div>
 						</header>
 
-						<div style={{flex:1, padding:20, overflowY:'auto', display: 'flex', flexDirection: 'column'}}>
+						{/* Messages Area */}
+						<div className="messages-chat-body">
 							{messages.length > 0 ? messages.map((msg, idx) => (
-								<div key={idx} style={{display:'flex', justifyContent: msg.sender_type === 'passenger' ? 'flex-end' : 'flex-start', marginBottom:12}}>
-									<div style={{
-										background: msg.sender_type === 'passenger' ? '#dbeafe' : '#f1f5f9',
-										padding:12,
-										borderRadius:12,
-										maxWidth:'60%',
-										border: msg.sender_type === 'passenger' ? '1px solid #dbefff' : '1px solid #e6eef6',
-										wordBreak: 'break-word'
-									}}>
-										<div style={{fontSize: 12, fontWeight: 500, marginBottom: 4, color: '#6b7280'}}>
+								<div 
+									key={idx} 
+									className={`chat-message ${msg.sender_type === 'passenger' ? 'sent' : 'received'}`}
+								>
+									<div className="chat-message-avatar">
+										{msg.sender_name?.[0] || msg.sender_email?.[0] || 'D'}
+									</div>
+									<div className="chat-message-bubble">
+										<div className="chat-message-sender">
 											{msg.sender_name || msg.sender_email}
 										</div>
-										{msg.message_text}
-										<div style={{fontSize: 11, color: '#9ca3af', marginTop: 4}}>
-											{new Date(msg.created_at).toLocaleTimeString()}
+										<div className="chat-message-text">
+											{msg.message_text}
+										</div>
+										<div className="chat-message-time">
+											{new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
 										</div>
 									</div>
 								</div>
 							)) : (
-								<div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af'}}>
-									No messages yet. Start the conversation!
+								<div className="messages-chat-empty">
+									<MessageCircle size={48} />
+									<p>No messages yet</p>
+									<span>Start the conversation with your driver!</span>
 								</div>
 							)}
 							<div ref={messagesEndRef} />
 						</div>
 
-						<footer style={{padding:12, borderTop:'1px solid #eef2f7', display:'flex', gap:8, alignItems:'center'}}>
-							<form onSubmit={handleSendMessage} style={{display: 'flex', gap: 8, width: '100%'}}>
+						{/* Message Input */}
+						<footer className="messages-chat-footer">
+							<form onSubmit={handleSendMessage} className="messages-chat-form">
 								<input 
-									placeholder="Type a message" 
+									type="text"
+									placeholder="Type your message..." 
 									value={newMessage}
 									onChange={(e) => setNewMessage(e.target.value)}
-									style={{flex:1, padding:10, borderRadius:8, border:'1px solid #e6eef6', outline:'none'}}
+									className="messages-chat-input"
 									disabled={loading}
 								/>
 								<button 
 									type="submit"
-									style={{background:'#0ea5a4', color:'#fff', border:'none', padding:'10px 14px', borderRadius:8, cursor:'pointer', opacity: loading ? 0.6 : 1}}
-									disabled={loading}
+									className="messages-send-btn"
+									disabled={loading || !newMessage.trim()}
+									title="Send message"
 								>
-									{loading ? 'Sending...' : 'Send'}
+									<Send size={18} />
 								</button>
 							</form>
 						</footer>
 					</>
 				) : (
-					<div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af'}}>
-						Select a booking to start chatting
+					<div className="messages-chat-empty">
+						<MessageCircle size={64} />
+						<p>Select a booking to start messaging</p>
+						<span>Choose an active booking from the left panel</span>
 					</div>
 				)}
 			</section>
