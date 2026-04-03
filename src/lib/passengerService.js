@@ -163,6 +163,18 @@ export const savePassengerProfile = async (passengerData) => {
     console.log('Upsert response - Error:', error, 'Data:', data)
 
     if (error) {
+      // Check if it's an RLS policy error
+      if (error.message?.includes('Failed to fetch') || error.status === undefined) {
+        console.error('🔒 Likely RLS Policy Block - Supabase error details:', {
+          message: error.message,
+          code: error.code,
+          status: error.status,
+          details: error.details,
+          hint: error.hint
+        })
+        throw new Error('Unable to save profile. RLS policies or network issue. Please check Supabase settings.')
+      }
+      
       console.error('Supabase error details:', {
         message: error.message,
         code: error.code,
@@ -173,10 +185,10 @@ export const savePassengerProfile = async (passengerData) => {
       throw new Error(`Failed to save profile: ${error.message}`)
     }
 
-    console.log('Profile saved successfully:', data)
+    console.log('✅ Profile saved successfully:', data)
     return data[0] || null
   } catch (err) {
-    console.error('Error in savePassengerProfile:', err)
+    console.error('❌ Error in savePassengerProfile:', err)
     // Re-throw for the component to handle
     throw err
   }
