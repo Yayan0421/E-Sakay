@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { User, Mail, Phone, MapPin, Edit2, Save, X, LogOut, Shield, Eye, Bell, Camera, Star, AlertCircle } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 import Swal from 'sweetalert2'
+import { savePassengerProfile, getPassengerByEmail } from '../../lib/passengerService'
 
 export default function Profile(){
   const supabase = useMemo(() => createClient(
@@ -34,14 +35,10 @@ export default function Profile(){
         setLoading(true)
         
         // Get current session first
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        
-        if (sessionError) {
-          console.warn('Session error:', sessionError)
-        }
+        await supabase.auth.getSession()
 
         // Try getUser if session exists
-        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        const { data: { user }, error: _authError } = await supabase.auth.getUser()
         
         if (!user) {
           // Fallback to localStorage for testing/demo
@@ -51,24 +48,21 @@ export default function Profile(){
             console.log('Using stored user:', userData)
             
             // Try to fetch from Supabase using stored email
-            const { data, error: fetchError } = await supabase
-              .from('passengers')
-              .select('*')
-              .eq('email', userData.email)
-              .single()
+            const passengerData = await getPassengerByEmail(userData.email)
 
-            if (!fetchError && data) {
+            if (passengerData) {
               const profileData = {
-                id: data.id,
-                name: data.name || userData.name || '',
-                email: data.email || userData.email || '',
-                phone: data.phone || '',
-                address: data.address || '',
-                avatar_url: data.avatar_url || '',
-                avatar: (data.name || userData.name || 'P').charAt(0).toUpperCase(),
-                created_at: data.created_at,
-                updated_at: data.updated_at
+                id: passengerData.id,
+                name: passengerData.name || userData.name || '',
+                email: passengerData.email || userData.email || '',
+                phone: passengerData.phone || '',
+                address: passengerData.address || '',
+                avatar_url: passengerData.avatar_url || '',
+                avatar: (passengerData.name || userData.name || 'P').charAt(0).toUpperCase(),
+                created_at: passengerData.created_at,
+                updated_at: passengerData.updated_at
               }
+              console.log('Loaded passenger data from database:', profileData)
               setProfile(profileData)
               setTempProfile(profileData)
             } else {
@@ -86,29 +80,22 @@ export default function Profile(){
           return
         }
 
-        // Try to fetch by email (more reliable)
-        const { data, error: fetchError } = await supabase
-          .from('passengers')
-          .select('*')
-          .eq('email', user.email)
-          .single()
+        // Try to fetch by email using the service
+        const passengerData = await getPassengerByEmail(user.email)
 
-        if (fetchError && fetchError.code !== 'PGRST116') {
-          console.warn('Error fetching passenger:', fetchError)
-        }
-
-        if (data) {
+        if (passengerData) {
           const profileData = {
-            id: data.id,
-            name: data.name || '',
-            email: data.email || '',
-            phone: data.phone || '',
-            address: data.address || '',
-            avatar_url: data.avatar_url || '',
-            avatar: (data.name || 'P').charAt(0).toUpperCase(),
-            created_at: data.created_at,
-            updated_at: data.updated_at
+            id: passengerData.id,
+            name: passengerData.name || '',
+            email: passengerData.email || '',
+            phone: passengerData.phone || '',
+            address: passengerData.address || '',
+            avatar_url: passengerData.avatar_url || '',
+            avatar: (passengerData.name || 'P').charAt(0).toUpperCase(),
+            created_at: passengerData.created_at,
+            updated_at: passengerData.updated_at
           }
+          console.log('Loaded passenger data from database:', profileData)
           setProfile(profileData)
           setTempProfile(profileData)
         } else {
@@ -134,52 +121,73 @@ export default function Profile(){
   const handleSave = async () => {
     try {
       setLoading(true)
+      setError(null)
       
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      // Validate required fields
+      if (!tempProfile.email || !tempProfile.name) {
+        throw new Error('Email and name are required fields')
+      }
+
+      const { data: { user: _user } } = await supabase.auth.getUser()
+      // user variable will be used in catch/finally if needed
       
-      // If no auth user, try localStorage
-      let userEmail = user?.email
+      // Get user email (from auth or localStorage)
+      let userEmail = tempProfile.email
       if (!userEmail) {
         const storedUser = localStorage.getItem('user')
         if (storedUser) {
           userEmail = JSON.parse(storedUser).email
         } else {
-          throw new Error('User not authenticated')
+          throw new Error('Email is required to save profile')
         }
       }
 
-      const { error: updateError } = await supabase
-        .from('passengers')
-        .upsert({
-          id: profile.id || undefined,
-          email: tempProfile.email,
-          name: tempProfile.name,
-          phone: tempProfile.phone,
-          address: tempProfile.address,
-          avatar_url: tempProfile.avatar_url,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'email' })
+      // Prepare data for saving
+      const dataToSave = {
+        email: tempProfile.email,
+        name: tempProfile.name,
+        phone: tempProfile.phone,
+        address: tempProfile.address,
+        avatar_url: tempProfile.avatar_url
+      }
 
-      if (updateError) throw updateError
+      console.log('Saving profile data:', dataToSave)
 
-      setProfile(tempProfile)
-      setIsEditing(false)
-      setError(null)
+      // Use the passenger service to save
+      const savedData = await savePassengerProfile(dataToSave)
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Profile Updated',
-        text: 'Your profile has been saved successfully',
-        confirmButtonColor: '#0ea5a4'
-      })
+      if (savedData) {
+        const updatedProfile = {
+          ...tempProfile,
+          id: savedData.id,
+          created_at: savedData.created_at,
+          updated_at: savedData.updated_at
+        }
+        
+        setProfile(updatedProfile)
+        setTempProfile(updatedProfile)
+        setIsEditing(false)
+
+        console.log('Profile saved successfully to database:', savedData)
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Profile Updated',
+          text: 'Your profile has been saved successfully to the database',
+          confirmButtonColor: '#0ea5a4',
+          timer: 3000
+        })
+      } else {
+        throw new Error('Failed to save profile')
+      }
     } catch (err) {
       console.error('Error saving profile:', err)
       setError(err.message)
 
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: err.message,
+        title: 'Error Saving Profile',
+        text: err.message || 'Failed to save your profile',
         confirmButtonColor: '#0ea5a4'
       })
     } finally {
