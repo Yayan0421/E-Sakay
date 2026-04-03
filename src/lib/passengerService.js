@@ -1,9 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
+console.log('Initializing Supabase client with:')
+console.log('URL:', import.meta.env.VITE_SUPABASE_URL)
+console.log('Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
+
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 )
+
+console.log('Supabase client initialized:', !!supabase)
 
 /**
  * Fetch passenger profile by email
@@ -144,6 +150,8 @@ export const savePassengerProfile = async (passengerData) => {
       throw new Error('Email is required to save profile')
     }
 
+    console.log('Attempting to save passenger:', passengerData)
+
     const { data, error } = await supabase
       .from('passengers')
       .upsert({
@@ -152,8 +160,16 @@ export const savePassengerProfile = async (passengerData) => {
       }, { onConflict: 'email' })
       .select()
 
+    console.log('Upsert response - Error:', error, 'Data:', data)
+
     if (error) {
-      console.error('Error saving passenger profile:', error)
+      console.error('Supabase error details:', {
+        message: error.message,
+        code: error.code,
+        status: error.status,
+        details: error.details,
+        hint: error.hint
+      })
       throw new Error(`Failed to save profile: ${error.message}`)
     }
 
