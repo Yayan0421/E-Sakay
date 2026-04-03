@@ -735,8 +735,6 @@ input:checked + .slider:before {
     grid-template-columns: 1fr;
   }
 }
-    font-size: 1.25rem;
-  }
 
   .profile-section {
     padding: 1.5rem;

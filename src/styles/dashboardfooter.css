@@ -159,19 +159,3 @@
     font-size: 0.7rem;
   }
 }
-  }
-
-  .footer-container {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem;
-  }
-
-  .footer-section h3 {
-    font-size: 1.125rem;
-  }
-
-  .footer-bottom {
-    padding: 1.5rem;
-  }
-}
