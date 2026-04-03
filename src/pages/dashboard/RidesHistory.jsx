@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { apiUrl } from '../../lib/api'
 import { MapPin, Clock, Phone, FileText, History } from 'lucide-react'
+import '../../styles/rideshistory.css'
+import '../../styles/homedashboard.css'
 
 export default function RidesHistory(){
   const [rides, setRides] = useState([])
