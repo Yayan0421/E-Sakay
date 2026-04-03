@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { apiUrl } from '../lib/api'
+import '../styles/App.css'
 
 export default function PaymentConfirm() {
   const [searchParams] = useSearchParams()
@@ -23,11 +23,14 @@ export default function PaymentConfirm() {
     setIsConfirming(true)
     
     try {
-      const response = await fetch(apiUrl('/api/payments/confirm-payment'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ transactionId })
-      })
+      const response = await fetch(
+        'http://localhost:4001/api/payments/confirm-payment',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ transactionId })
+        }
+      )
       const data = await response.json()
       
       if (response.ok && data.data.status === 'paid') {

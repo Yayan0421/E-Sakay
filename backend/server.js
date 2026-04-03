@@ -12,37 +12,9 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 4001;
 
-const configuredOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || '')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-
-const allowedOrigins = Array.from(new Set([
-  'http://localhost:4000',
-  'http://localhost:5173',
-  ...configuredOrigins
-]));
-
-const isAllowedOrigin = (origin) => {
-  if (!origin) return true;
-  // Remove trailing slash for comparison
-  const normalizedOrigin = origin.replace(/\/$/, '');
-  const normalizedAllowed = allowedOrigins.map(o => o.replace(/\/$/, ''));
-  if (normalizedAllowed.includes(normalizedOrigin)) return true;
-  // Allow Netlify and Vercel deployments by default
-  return origin.endsWith('.netlify.app') || origin.endsWith('.vercel.app');
-};
-
 // Middleware
 app.use(cors({
-  origin(origin, callback) {
-    if (isAllowedOrigin(origin)) {
-      callback(null, true);
-      return;
-    }
-
-    callback(new Error(`CORS blocked for origin: ${origin}`));
-  },
+  origin: 'http://localhost:4000',
   credentials: true
 }));
 app.use(express.json());
@@ -69,6 +41,6 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`📡 CORS enabled for: ${allowedOrigins.join(', ')}${configuredOrigins.length === 0 ? ', *.netlify.app' : ''}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`📡 CORS enabled for http://localhost:4000`);
 });
