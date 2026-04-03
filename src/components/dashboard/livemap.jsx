@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
+import '../../styles/livemap.css'
 
 // Custom marker icons (created once)
 const carIcon = L.icon({

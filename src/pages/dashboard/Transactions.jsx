@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { apiUrl } from '../../lib/api'
+import '../../styles/transactions.css'
 
 export default function Transactions() {
   const { collapsed } = useOutletContext() || { collapsed: false }

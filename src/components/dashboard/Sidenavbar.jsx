@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { apiUrl } from '../../lib/api'
+import '../../styles/sidenavbar.css'
 import logo from '../../assets/logo.png.jpg'
 
 const navItems = [

@@ -1,6 +1,8 @@
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Message from '../../components/dashboard/message'
+import '../../styles/messages.css'
+import '../../styles/homedashboard.css'
 
 export default function Messages(){
   const { collapsed } = useOutletContext() || { collapsed: false }

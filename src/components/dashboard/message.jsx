@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { apiUrl } from '../../lib/api'
+import '../../styles/messages.css'
 
 export default function Message({ collapsed = false }){
 	const [pendingBookings, setPendingBookings] = useState([])

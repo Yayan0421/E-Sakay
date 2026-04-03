@@ -1,6 +1,7 @@
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Heart, Zap, Shield, Users } from 'lucide-react'
+import '../../styles/aboutus.css'
 
 export default function AboutUs(){
   const { collapsed } = useOutletContext() || { collapsed: false }

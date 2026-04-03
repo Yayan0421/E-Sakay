@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import LiveMap from '../../components/dashboard/livemap'
 import { useOutletContext } from 'react-router-dom'
+import '../../styles/livemap.css'
+import '../../styles/homedashboard.css'
 
 function LiveMapPage() {
   const { collapsed } = useOutletContext()

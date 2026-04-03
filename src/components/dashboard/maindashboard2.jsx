@@ -1,6 +1,7 @@
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { MapPin, Bike, CheckCircle } from 'lucide-react'
+import '../../styles/maindashboard2.css'
 
 export default function MainDashboard2() {
   const { collapsed } = useOutletContext() || { collapsed: false }

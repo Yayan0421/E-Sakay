@@ -4,6 +4,9 @@ import Swal from 'sweetalert2'
 import Sidenavbar from '../components/dashboard/Sidenavbar'
 import DashboardFooter from '../components/dashboard/dashboardfooter'
 import { usePaymentCallback } from '../hooks/use-payment-callback'
+import '../styles/homedashboard.css'
+import '../styles/sidenavbar.css'
+import '../styles/App.css'
 
 export default function Dashboard(){
 	const [collapsed, setCollapsed] = useState(false)

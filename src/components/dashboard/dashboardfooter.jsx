@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/dashboardfooter.css';
 
 export default function DashboardFooter() {
   return (
