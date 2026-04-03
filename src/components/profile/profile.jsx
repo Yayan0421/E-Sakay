@@ -70,11 +70,13 @@ export default function Profile(){
                 created_at: passengerData.created_at,
                 updated_at: passengerData.updated_at
               }
-              console.log('Loaded passenger data from database:', profileData)
+              console.log('✅ Loaded passenger data from localStorage fallback:', profileData)
+              console.log('📸 Avatar URL from database:', passengerData.avatar_url)
               setProfile(profileData)
               setTempProfile(profileData)
             } else {
               // No database record, use stored user
+              console.warn('⚠️ No passenger record found. Using localStorage data.')
               setProfile(prev => ({
                 ...prev,
                 email: userData.email,
@@ -103,11 +105,13 @@ export default function Profile(){
             created_at: passengerData.created_at,
             updated_at: passengerData.updated_at
           }
-          console.log('Loaded passenger data from database:', profileData)
+          console.log('✅ Loaded passenger data from database:', profileData)
+          console.log('📸 Avatar URL from database:', passengerData.avatar_url)
           setProfile(profileData)
           setTempProfile(profileData)
         } else {
           // User authenticated but no passenger record yet
+          console.warn('⚠️ No passenger record found for:', user.email)
           setProfile(prev => ({
             ...prev,
             email: user.email,
@@ -126,12 +130,24 @@ export default function Profile(){
     fetchProfile()
   }, [supabase])
 
-  // Sync tempProfile with profile when profile data loads
+  // Sync tempProfile with profile when profile data loads (especially avatar_url)
   useEffect(() => {
-    if (profile.email && !tempProfile) {
-      setTempProfile(profile)
+    if (profile.email && !isEditing) {
+      // Only sync if not in editing mode to preserve user's temp edits
+      setTempProfile(prev => ({
+        ...prev,
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        address: profile.address,
+        avatar_url: profile.avatar_url, // Ensure avatar_url is always current
+        avatar: profile.avatar,
+        id: profile.id,
+        created_at: profile.created_at,
+        updated_at: profile.updated_at
+      }))
     }
-  }, [profile, tempProfile])
+  }, [profile.avatar_url, isEditing]) // Trigger when avatar_url changes
 
   const handleSave = async () => {
     try {
@@ -396,9 +412,9 @@ export default function Profile(){
                 alt="Preview"
                 className="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-teal-100"
               />
-            ) : tempProfile?.avatar_url ? (
+            ) : (tempProfile?.avatar_url || profile?.avatar_url) ? (
               <img 
-                src={tempProfile.avatar_url} 
+                src={tempProfile?.avatar_url || profile?.avatar_url} 
                 alt="Avatar"
                 className="w-24 h-24 rounded-full object-cover shadow-lg border-4 border-teal-100"
               />
@@ -583,17 +599,18 @@ export default function Profile(){
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Avatar URL (Auto-filled)</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Avatar URL (Database)</label>
                 <input
                   type="url"
-                  name="avatar_url"
-                  value={tempProfile?.avatar_url || ''}
-                  onChange={handleInputChange}
-                  placeholder="Avatar URL will be auto-filled after upload"
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 transition-colors"
+                  value={profile?.avatar_url || ''}
+                  placeholder="No avatar URL yet"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-600 font-mono text-xs"
                   readOnly
+                  title="This URL is saved in your database"
                 />
-                <p className="text-xs text-gray-500 mt-1">Auto-populated when you upload a picture</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {profile?.avatar_url ? '✅ Avatar saved in database' : '⭕ Upload a photo to save'}
+                </p>
               </div>
 
               {/* Action Buttons */}
