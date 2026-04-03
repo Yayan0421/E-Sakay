@@ -409,6 +409,20 @@
   font-weight: 600;
   color: #f7fff8;
   word-break: break-word;
+}
+
+/* MOBILE RESPONSIVE FIX - Hide sidebar on small screens */
+@media (max-width: 768px) {
+  .sidenav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidenav {
+    display: none !important;
+  }
+}
   line-height: 1.3;
 }
 

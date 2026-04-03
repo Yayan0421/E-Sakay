@@ -339,6 +339,73 @@
   }
 }
 
+/* MOBILE RESPONSIVE FIX - Remove sidebar width/margin calculations on small screens */
+@media (max-width: 768px) {
+  .transactions-wrapper {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+
+  .transactions-wrapper.sidebar-collapsed,
+  .transactions-wrapper.sidebar-expanded {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .transactions-header {
+    width: 100%;
+  }
+
+  .transactions-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .transactions-table {
+    font-size: 0.85rem;
+    overflow-x: auto;
+  }
+
+  .transactions-summary {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .transactions-wrapper {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 0.75rem;
+  }
+
+  .transactions-header {
+    padding-bottom: 1rem;
+    width: 100%;
+  }
+
+  .transactions-header h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .transactions-table {
+    font-size: 0.75rem;
+  }
+
+  .transactions-summary {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  .summary-card {
+    padding: 12px;
+  }
+
+  .summary-value {
+    font-size: 16px;
+  }
+}
+
 /* Mobile (480px and below) */
 @media (max-width: 480px) {
   .transactions-wrapper {

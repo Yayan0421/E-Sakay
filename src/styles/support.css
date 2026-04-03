@@ -328,10 +328,97 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .support-page-header {
-    padding: 2rem 1.5rem;
+    margin-left: 0 !important;
+    padding: 1.5rem 1rem;
   }
+
+  .support-page-container {
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+
+  .support-main-title {
+    font-size: 1.5rem;
+  }
+
+  .support-tagline {
+    font-size: 1rem;
+  }
+
+  .faq-section {
+    max-width: 100%;
+  }
+
+  .support-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .faq-list, 
+  .ticket-form {
+    width: 100%;
+  }
+
+  .ticket-form {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-page-header {
+    margin-left: 0 !important;
+    padding: 1rem 0.75rem;
+  }
+
+  .support-page-container {
+    margin-left: 0 !important;
+    padding: 0.75rem;
+  }
+
+  .support-main-title {
+    font-size: 1.25rem;
+  }
+
+  .support-tagline {
+    font-size: 0.875rem;
+  }
+
+  .faq-item {
+    padding: 0.75rem;
+  }
+
+  .faq-title {
+    font-size: 0.9rem;
+  }
+
+  .ticket-form {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px; 
+    padding: 0.5rem;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+}
 
   .support-main-title {
     font-size: 2rem;
