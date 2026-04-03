@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { MapPin, Navigation, FileText, User } from 'lucide-react';
-import { useOutletContext, Link } from 'react-router-dom';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import PaymentModal from './PaymentModal';
 import { apiUrl } from '../../lib/api';
 import '../../styles/homedashboard.css';
 
 export default function MainDashboard() {
+  const navigate = useNavigate();
   const { collapsed } = useOutletContext() || { collapsed: false };
   const [vehicleType, setVehicleType] = useState('motorcycle');
   const [pickupLocation, setPickupLocation] = useState('');
@@ -206,11 +207,17 @@ export default function MainDashboard() {
 
             {/* Action Buttons */}
             <div className="action-buttons">
-              <button className="btn-primary">
+              <button 
+                onClick={() => navigate('/dashboard/booking')}
+                className="btn-primary"
+              >
                 <MapPin className="w-5 h-5" />
                 Book a Ride
               </button>
-              <button className="btn-secondary">
+              <button 
+                onClick={() => navigate('/dashboard/rides')}
+                className="btn-secondary"
+              >
                 My Rides →
               </button>
             </div>

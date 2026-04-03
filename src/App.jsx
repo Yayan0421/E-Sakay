@@ -6,6 +6,7 @@ import Terms from "./components/login/terms";
 import Privacy from "./components/login/privacy";
 import DashboardLayout from "./pages/Dashboard";
 import DashboardHome from "./pages/dashboard/DashboardHome";
+import BookingPage from "./components/dashboard/BookingPage";
 import Messages from "./pages/dashboard/Messages";
 import RidesHistory from "./pages/dashboard/RidesHistory";
 import Transactions from "./pages/dashboard/Transactions";
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
       element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
       children: [
         { index: true, element: <DashboardHome /> },
+        { path: "booking", element: <BookingPage /> },
         { path: "messages", element: <Messages /> },
         { path: "rides", element: <RidesHistory /> },
         { path: "transactions", element: <Transactions /> },
