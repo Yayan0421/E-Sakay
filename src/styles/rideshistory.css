@@ -234,49 +234,5 @@
     gap: 8px;
     padding: 8px;
   }
-
-  .meta-row {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .meta-item {
-    padding: 8px;
-    font-size: 0.75rem;
-    flex: 1;
-    min-width: calc(50% - 4px);
-  }
-
-  .small {
-    font-size: 0.75rem;
-  }
-
-  .bike-image {
-    height: 100px;
-  }
 }
 
-  .rides-filters {
-    flex-wrap: wrap;
-  }
-
-  .rides-title {
-    font-size: 1.75rem;
-  }
-
-  .rides-card {
-    flex-direction: column;
-    padding: 1.5rem;
-  }
-
-  .left-col,
-  .right-col {
-    width: 100%;
-  }
-
-  .driver-box {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-}
