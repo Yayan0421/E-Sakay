@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { User, Mail, Phone, MapPin, Edit2, Save, X, LogOut, Shield, Eye, Bell, Camera, Star, AlertCircle } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 import Swal from 'sweetalert2'
 import { savePassengerProfile, getPassengerByEmail } from '../../lib/passengerService'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function Profile(){
+  const navigate = useNavigate()
+  const { logout } = useAuth()
+  
   const supabase = useMemo(() => createClient(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -211,6 +216,48 @@ export default function Profile(){
     }))
   }
 
+  const handleLogout = async () => {
+    try {
+      // Confirm logout
+      const result = await Swal.fire({
+        icon: 'question',
+        title: 'Logout',
+        text: 'Are you sure you want to logout?',
+        showCancelButton: true,
+        confirmButtonColor: '#0ea5a4',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, Logout'
+      })
+
+      if (result.isConfirmed) {
+        // Clear auth from context
+        logout()
+        
+        // Show success message
+        Swal.fire({
+          icon: 'success',
+          title: 'Logged Out',
+          text: 'You have been logged out successfully',
+          confirmButtonColor: '#0ea5a4',
+          timer: 2000
+        })
+
+        // Redirect to landing page
+        setTimeout(() => {
+          navigate('/')
+        }, 500)
+      }
+    } catch (err) {
+      console.error('Logout error:', err)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to logout',
+        confirmButtonColor: '#0ea5a4'
+      })
+    }
+  }
+
   if (loading && !profile.email) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -259,13 +306,22 @@ export default function Profile(){
 
           {/* Edit Button */}
           {!isEditing && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="px-6 py-2 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center gap-2 whitespace-nowrap"
-            >
-              <Edit2 size={18} />
-              Edit
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-6 py-2 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center gap-2 whitespace-nowrap"
+              >
+                <Edit2 size={18} />
+                Edit
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center gap-2 whitespace-nowrap"
+              >
+                <LogOut size={18} />
+                Logout
+              </button>
+            </div>
           )}
         </div>
 
