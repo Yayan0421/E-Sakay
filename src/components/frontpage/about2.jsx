@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 const About2 = () => {
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 flex flex-col items-center" id="contact">
-      <div className="max-w-4xl mx-auto">
+    <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 flex flex-col items-center overflow-hidden" id="contact">
+      <div className="max-w-4xl mx-auto w-full">
         {/* CTA Card - Responsive padding and layout */}
         <div className="relative overflow-hidden bg-linear-to-r from-emerald-500 to-emerald-600 rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20 shadow-2xl">
           {/* Decorative background elements */}
