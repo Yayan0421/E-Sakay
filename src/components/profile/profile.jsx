@@ -33,23 +33,68 @@ export default function Profile(){
       try {
         setLoading(true)
         
+        // Get current session first
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError) {
+          console.warn('Session error:', sessionError)
+        }
+
+        // Try getUser if session exists
         const { data: { user }, error: authError } = await supabase.auth.getUser()
         
-        if (authError) throw authError
         if (!user) {
-          setError('User not authenticated')
+          // Fallback to localStorage for testing/demo
+          const storedUser = localStorage.getItem('user')
+          if (storedUser) {
+            const userData = JSON.parse(storedUser)
+            console.log('Using stored user:', userData)
+            
+            // Try to fetch from Supabase using stored email
+            const { data, error: fetchError } = await supabase
+              .from('passengers')
+              .select('*')
+              .eq('email', userData.email)
+              .single()
+
+            if (!fetchError && data) {
+              const profileData = {
+                id: data.id,
+                name: data.name || userData.name || '',
+                email: data.email || userData.email || '',
+                phone: data.phone || '',
+                address: data.address || '',
+                avatar_url: data.avatar_url || '',
+                avatar: (data.name || userData.name || 'P').charAt(0).toUpperCase(),
+                created_at: data.created_at,
+                updated_at: data.updated_at
+              }
+              setProfile(profileData)
+              setTempProfile(profileData)
+            } else {
+              // No database record, use stored user
+              setProfile(prev => ({
+                ...prev,
+                email: userData.email,
+                name: userData.name || '',
+                avatar: (userData.name || userData.email || 'P').charAt(0).toUpperCase()
+              }))
+            }
+          } else {
+            setError('Please log in to view your profile')
+          }
           return
         }
 
-        // Try to fetch by user.id first, then by email
-        let { data, error: fetchError } = await supabase
+        // Try to fetch by email (more reliable)
+        const { data, error: fetchError } = await supabase
           .from('passengers')
           .select('*')
           .eq('email', user.email)
           .single()
 
         if (fetchError && fetchError.code !== 'PGRST116') {
-          console.warn('Error fetching by email:', fetchError)
+          console.warn('Error fetching passenger:', fetchError)
         }
 
         if (data) {
@@ -67,17 +112,13 @@ export default function Profile(){
           setProfile(profileData)
           setTempProfile(profileData)
         } else {
-          // Fallback to localStorage
-          const userData = localStorage.getItem('user')
-          if (userData) {
-            const user = JSON.parse(userData)
-            setProfile(prev => ({
-              ...prev,
-              email: user.email,
-              name: user.name || '',
-              avatar: (user.name || user.email || 'P').charAt(0).toUpperCase()
-            }))
-          }
+          // User authenticated but no passenger record yet
+          setProfile(prev => ({
+            ...prev,
+            email: user.email,
+            name: user.user_metadata?.name || '',
+            avatar: (user.user_metadata?.name || user.email || 'P').charAt(0).toUpperCase()
+          }))
         }
       } catch (err) {
         console.error('Error fetching profile:', err)
@@ -96,8 +137,16 @@ export default function Profile(){
       
       const { data: { user }, error: authError } = await supabase.auth.getUser()
       
-      if (authError) throw authError
-      if (!user) throw new Error('User not authenticated')
+      // If no auth user, try localStorage
+      let userEmail = user?.email
+      if (!userEmail) {
+        const storedUser = localStorage.getItem('user')
+        if (storedUser) {
+          userEmail = JSON.parse(storedUser).email
+        } else {
+          throw new Error('User not authenticated')
+        }
+      }
 
       const { error: updateError } = await supabase
         .from('passengers')
