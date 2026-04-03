@@ -1,3 +1,6 @@
+/* Import Tailwind CSS */
+@import "tailwindcss";
+
 /* Global and consolidated component styles for the landing page */
 :root{
 	--text:#21343a;
