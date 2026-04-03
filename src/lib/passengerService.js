@@ -11,6 +11,28 @@ const supabase = createClient(
 
 console.log('Supabase client initialized:', !!supabase)
 
+// Test basic connection
+const testConnection = async () => {
+  try {
+    console.log('🧪 Testing Supabase connection...')
+    const { data, error } = await supabase
+      .from('passengers')
+      .select('count', { count: 'exact' })
+      .limit(1)
+    
+    if (error) {
+      console.error('❌ Connection test failed:', error)
+    } else {
+      console.log('✅ Supabase connection successful')
+    }
+  } catch (err) {
+    console.error('❌ Connection test error:', err)
+  }
+}
+
+// Run test after short delay
+setTimeout(testConnection, 500)
+
 /**
  * Fetch passenger profile by email
  * @param {string} email - Passenger email
@@ -150,46 +172,38 @@ export const savePassengerProfile = async (passengerData) => {
       throw new Error('Email is required to save profile')
     }
 
-    console.log('Attempting to save passenger:', passengerData)
+    console.log('🔍 DEBUG: Attempting to save passenger:', passengerData)
+    console.log('🔍 DEBUG: Supabase URL:', import.meta.env.VITE_SUPABASE_URL)
+    console.log('🔍 DEBUG: Has Auth Key:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
+
+    const savePayload = {
+      ...passengerData,
+      updated_at: new Date().toISOString()
+    }
+    
+    console.log('🔍 DEBUG: Payload to send:', savePayload)
 
     const { data, error } = await supabase
       .from('passengers')
-      .upsert({
-        ...passengerData,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'email' })
+      .upsert(savePayload, { onConflict: 'email' })
       .select()
 
-    console.log('Upsert response - Error:', error, 'Data:', data)
+    console.log('🔍 DEBUG: Upsert response received')
+    console.log('🔍 DEBUG: Error:', error)
+    console.log('🔍 DEBUG: Data:', data)
 
     if (error) {
-      // Check if it's an RLS policy error
-      if (error.message?.includes('Failed to fetch') || error.status === undefined) {
-        console.error('🔒 Likely RLS Policy Block - Supabase error details:', {
-          message: error.message,
-          code: error.code,
-          status: error.status,
-          details: error.details,
-          hint: error.hint
-        })
-        throw new Error('Unable to save profile. RLS policies or network issue. Please check Supabase settings.')
-      }
+      // Log full error object
+      console.error('❌ FULL ERROR OBJECT:', JSON.stringify(error, null, 2))
       
-      console.error('Supabase error details:', {
-        message: error.message,
-        code: error.code,
-        status: error.status,
-        details: error.details,
-        hint: error.hint
-      })
-      throw new Error(`Failed to save profile: ${error.message}`)
+      throw new Error(`Failed to save profile: ${error.message || 'Unknown error'}`)
     }
 
     console.log('✅ Profile saved successfully:', data)
     return data[0] || null
   } catch (err) {
     console.error('❌ Error in savePassengerProfile:', err)
-    // Re-throw for the component to handle
+    console.error('❌ Error stack:', err.stack)
     throw err
   }
 }
