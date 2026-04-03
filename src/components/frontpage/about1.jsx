@@ -2,8 +2,8 @@ import React from 'react'
 
 const About1 = () => {
   return (
-    <section className="w-full px-3 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20 bg-linear-to-b from-white to-gray-50 flex flex-col items-center overflow-hidden" id="how-it-works">
-      <div className="w-full max-w-6xl">
+    <section className="w-full px-3 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20 bg-linear-to-b from-white to-gray-50 flex flex-col items-center" id="how-it-works">
+      <div className="max-w-6xl w-full">
         {/* Section Header - Optimized for mobile */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <div className="inline-block px-3 py-1.5 bg-blue-100 rounded-full mb-3 sm:mb-4">
@@ -18,9 +18,9 @@ const About1 = () => {
         </div>
 
         {/* Steps Grid - Responsive: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 w-full overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 w-full">
           {/* Step 1 */}
-          <div className="flex flex-col items-center text-center overflow-hidden">
+          <div className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-linear-to-br from-blue-100 to-blue-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 md:mb-5 shadow-sm">
               📱
             </div>
@@ -34,7 +34,7 @@ const About1 = () => {
           </div>
 
           {/* Step 2 */}
-          <div className="flex flex-col items-center text-center overflow-hidden">
+          <div className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-linear-to-br from-emerald-100 to-emerald-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 md:mb-5 shadow-sm">
               🚲
             </div>
@@ -48,7 +48,7 @@ const About1 = () => {
           </div>
 
           {/* Step 3 */}
-          <div className="flex flex-col items-center text-center overflow-hidden">
+          <div className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-linear-to-br from-purple-100 to-purple-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 md:mb-5 shadow-sm">
               📍
             </div>
@@ -62,7 +62,7 @@ const About1 = () => {
           </div>
 
           {/* Step 4 */}
-          <div className="flex flex-col items-center text-center overflow-hidden">
+          <div className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-linear-to-br from-yellow-100 to-yellow-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 md:mb-5 shadow-sm">
               ✅
             </div>
