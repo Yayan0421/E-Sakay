@@ -116,20 +116,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-        <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-          <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
-          <a href="#features" onClick={() => setIsMenuOpen(false)}>Features</a>
-          <a href="#testimonials" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
-          <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
-        </nav>
-
-        <div className="nav-cta">
-          <Link to="/signup" className="btn-primary">Get Started</Link>
-        </div>
-      </div>
-    </header>
-  )
-}
-
-export default Navbar
