@@ -12,7 +12,7 @@ const supabase = createClient(
 )
 
 // Get API base URL - configurable via environment variable
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4001'
 
 console.log('API Base URL:', API_BASE_URL)
 
