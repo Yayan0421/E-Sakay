@@ -11,6 +11,11 @@ const supabase = createClient(
   }
 )
 
+// Get API base URL - configurable via environment variable
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
+
+console.log('API Base URL:', API_BASE_URL)
+
 /**
  * Fetch passenger profile by email
  * @param {string} email - Passenger email
@@ -26,7 +31,7 @@ export const getPassengerByEmail = async (email) => {
     console.log('🔍 DEBUG: Fetching passenger by email:', email)
 
     // Use backend API instead of direct Supabase call
-    const response = await fetch(`http://localhost:3001/api/passengers/by-email/${encodeURIComponent(email)}`)
+    const response = await fetch(`${API_BASE_URL}/passengers/by-email/${encodeURIComponent(email)}`))
 
     if (!response.ok) {
       console.warn('Backend fetch failed:', response.status)
@@ -153,7 +158,7 @@ export const savePassengerProfile = async (passengerData) => {
     console.log('🔍 DEBUG: Attempting to save passenger:', passengerData)
 
     // Use backend API instead of direct Supabase call
-    const response = await fetch('http://localhost:3001/api/passengers/save', {
+    const response = await fetch(`${API_BASE_URL}/passengers/save`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
