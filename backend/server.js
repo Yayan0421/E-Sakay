@@ -12,9 +12,35 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 4001;
 
+// CORS Configuration
+const configuredOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = Array.from(new Set([
+  'http://localhost:4000',
+  'http://localhost:5173',
+  ...configuredOrigins
+]));
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  const normalizedOrigin = origin.replace(/\/$/, '');
+  const normalizedAllowed = allowedOrigins.map(o => o.replace(/\/$/, ''));
+  if (normalizedAllowed.includes(normalizedOrigin)) return true;
+  return origin.endsWith('.netlify.app') || origin.endsWith('.vercel.app');
+};
+
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:4000',
+  origin(origin, callback) {
+    if (isAllowedOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true
 }));
 app.use(express.json());
