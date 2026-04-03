@@ -25,8 +25,12 @@ const allowedOrigins = Array.from(new Set([
 
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;
-  if (allowedOrigins.includes(origin)) return true;
-  return origin.endsWith('.netlify.app');
+  // Remove trailing slash for comparison
+  const normalizedOrigin = origin.replace(/\/$/, '');
+  const normalizedAllowed = allowedOrigins.map(o => o.replace(/\/$/, ''));
+  if (normalizedAllowed.includes(normalizedOrigin)) return true;
+  // Allow Netlify and Vercel deployments by default
+  return origin.endsWith('.netlify.app') || origin.endsWith('.vercel.app');
 };
 
 // Middleware
