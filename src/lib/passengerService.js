@@ -1,9 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 
-console.log('Initializing Supabase client with:')
-console.log('URL:', import.meta.env.VITE_SUPABASE_URL)
-console.log('Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
-
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY,
@@ -11,38 +7,9 @@ const supabase = createClient(
     auth: {
       persistSession: true,
       autoRefreshToken: true
-    },
-    global: {
-      headers: {
-        'Content-Type': 'application/json'
-      }
     }
   }
 )
-
-console.log('Supabase client initialized:', !!supabase)
-
-// Test basic connection
-const testConnection = async () => {
-  try {
-    console.log('🧪 Testing Supabase connection...')
-    const { data, error } = await supabase
-      .from('passengers')
-      .select('count', { count: 'exact' })
-      .limit(1)
-    
-    if (error) {
-      console.error('❌ Connection test failed:', error)
-    } else {
-      console.log('✅ Supabase connection successful')
-    }
-  } catch (err) {
-    console.error('❌ Connection test error:', err)
-  }
-}
-
-// Run test after short delay
-setTimeout(testConnection, 500)
 
 /**
  * Fetch passenger profile by email

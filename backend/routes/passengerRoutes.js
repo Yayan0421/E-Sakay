@@ -30,7 +30,7 @@ router.post('/save', async (req, res) => {
     let result
 
     if (existing?.id) {
-      // Update
+      // Update existing record - don't touch password
       console.log('Backend: Updating passenger:', existing.id)
       result = await supabase
         .from('passengers')
@@ -44,7 +44,7 @@ router.post('/save', async (req, res) => {
         .eq('id', existing.id)
         .select()
     } else {
-      // Insert
+      // Insert new record - must have password
       console.log('Backend: Inserting new passenger')
       result = await supabase
         .from('passengers')
@@ -54,7 +54,8 @@ router.post('/save', async (req, res) => {
           phone: phone || null,
           address: address || null,
           avatar_url: avatar_url || null,
-          password: 'temp_' + Date.now(), // Temporary password
+          password: 'default_password_' + Date.now(), // Generate a default password
+          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
         .select()
