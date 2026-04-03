@@ -56,24 +56,19 @@ export const getPassengerByEmail = async (email) => {
       return null
     }
 
-    const { data, error } = await supabase
-      .from('passengers')
-      .select('*')
-      .eq('email', email)
-      .single()
+    console.log('🔍 DEBUG: Fetching passenger by email:', email)
 
-    if (error) {
-      // PGRST116 = no rows found, which is ok
-      if (error.code === 'PGRST116') {
-        console.log('No passenger found for email:', email)
-        return null
-      }
-      // Other errors should be logged but not thrown
-      console.warn('Error querying passenger by email:', error)
+    // Use backend API instead of direct Supabase call
+    const response = await fetch(`http://localhost:4001/api/passengers/by-email/${encodeURIComponent(email)}`)
+
+    if (!response.ok) {
+      console.warn('Backend fetch failed:', response.status)
       return null
     }
 
-    return data || null
+    const result = await response.json()
+    console.log('✅ Fetched passenger data:', result.data)
+    return result.data || null
   } catch (err) {
     console.error('Unexpected error fetching passenger by email:', err)
     return null
@@ -177,6 +172,11 @@ export const getAllPassengers = async (page = 1, limit = 10) => {
  * @param {Object} passengerData - Passenger data to save
  * @returns {Promise<Object>} Updated passenger data
  */
+/**
+ * Save passenger profile via backend API
+ * @param {Object} passengerData - Passenger data to save
+ * @returns {Promise<Object>} Saved passenger object
+ */
 export const savePassengerProfile = async (passengerData) => {
   try {
     if (!passengerData || !passengerData.email) {
@@ -185,56 +185,26 @@ export const savePassengerProfile = async (passengerData) => {
 
     console.log('🔍 DEBUG: Attempting to save passenger:', passengerData)
 
-    // First, try to find existing record
-    console.log('🔍 DEBUG: Checking if passenger exists...')
-    const { data: existing, error: checkError } = await supabase
-      .from('passengers')
-      .select('id')
-      .eq('email', passengerData.email)
-      .single()
+    // Use backend API instead of direct Supabase call
+    const response = await fetch('http://localhost:4001/api/passengers/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(passengerData)
+    })
 
-    console.log('🔍 DEBUG: Existing check - Error:', checkError, 'Data:', existing)
+    console.log('🔍 DEBUG: Backend response status:', response.status)
 
-    let data, error
-    
-    if (existing?.id) {
-      // Record exists - update it
-      console.log('🔍 DEBUG: Updating existing passenger:', existing.id)
-      const result = await supabase
-        .from('passengers')
-        .update({
-          ...passengerData,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', existing.id)
-        .select()
-      
-      data = result.data
-      error = result.error
-    } else {
-      // Record doesn't exist - insert new one
-      console.log('🔍 DEBUG: Inserting new passenger')
-      const result = await supabase
-        .from('passengers')
-        .insert({
-          ...passengerData,
-          updated_at: new Date().toISOString()
-        })
-        .select()
-      
-      data = result.data
-      error = result.error
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error('❌ Backend error:', errorData)
+      throw new Error(`Failed to save profile: ${errorData.error || 'Unknown error'}`)
     }
 
-    console.log('🔍 DEBUG: Operation response - Error:', error, 'Data:', data)
-
-    if (error) {
-      console.error('❌ FULL ERROR OBJECT:', JSON.stringify(error, null, 2))
-      throw new Error(`Failed to save profile: ${error.message || 'Unknown error'}`)
-    }
-
-    console.log('✅ Profile saved successfully:', data)
-    return data?.[0] || null
+    const result = await response.json()
+    console.log('✅ Profile saved successfully via backend:', result.data)
+    return result.data || null
   } catch (err) {
     console.error('❌ Error in savePassengerProfile:', err)
     console.error('❌ Error stack:', err.stack)
