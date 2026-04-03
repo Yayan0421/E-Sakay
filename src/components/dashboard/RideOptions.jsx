@@ -63,7 +63,7 @@ export default function RideOptions({ selectedRide, onRideSelect }) {
           <div className="flex gap-4 items-center md:items-start">
             {/* Ride Icon */}
             <div className={`
-              text-4xl flex-shrink-0
+              text-4xl shrink-0
             `}>
               {ride.icon}
             </div>
@@ -75,7 +75,7 @@ export default function RideOptions({ selectedRide, onRideSelect }) {
                   <h3 className="font-bold text-gray-900 text-base">{ride.name}</h3>
                   <p className="text-xs text-gray-500">{ride.description}</p>
                 </div>
-                <div className="text-right flex-shrink-0">
+                <div className="text-right shrink-0">
                   <p className="font-bold text-lg text-teal-600">₱{ride.basePrice}</p>
                   <p className="text-xs text-gray-500">Base fare</p>
                 </div>
@@ -96,7 +96,7 @@ export default function RideOptions({ selectedRide, onRideSelect }) {
 
             {/* Selection Indicator */}
             {selectedRide?.id === ride.id && (
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

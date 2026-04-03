@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { apiUrl } from '../../lib/api'
 import {
   Home,
   MessageSquare,
@@ -28,9 +27,8 @@ const navItems = [
 export default function ResponsiveNav({ mode = 'desktop' }) {
   const location = useLocation()
   const navigate = useNavigate()
-  const { logout, user } = useAuth()
+  const { logout } = useAuth()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const userData = JSON.parse(localStorage.getItem('user') || '{}')
 
   const handleLogout = () => {
@@ -87,7 +85,7 @@ export default function ResponsiveNav({ mode = 'desktop' }) {
       {/* Desktop Sidebar Header */}
       <div className="px-6 py-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+          <div className="w-12 h-12 bg-linear-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
           <div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { User, Mail, Phone, MapPin, Edit2, Save, X, LogOut, Shield, Eye, Bell, Camera, Star, AlertCircle } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 import Swal from 'sweetalert2'
@@ -10,7 +9,6 @@ export default function Profile(){
     import.meta.env.VITE_SUPABASE_ANON_KEY
   ), [])
 
-  const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const [activeTab, setActiveTab] = useState('personal')
   const [loading, setLoading] = useState(true)
@@ -161,8 +159,8 @@ export default function Profile(){
       <div className="bg-white rounded-2xl shadow-md p-4 md:p-6 mb-6">
         {/* Avatar Section */}
         <div className="flex flex-col md:flex-row gap-6 mb-6 items-center md:items-start">
-          <div className="relative flex-shrink-0">
-            <div className="w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+          <div className="relative shrink-0">
+            <div className="w-24 h-24 bg-linear-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
               {tempProfile.avatar}
             </div>
           </div>
@@ -196,7 +194,7 @@ export default function Profile(){
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex gap-2">
-            <AlertCircle size={20} className="text-red-600 flex-shrink-0" />
+            <AlertCircle size={20} className="text-red-600 shrink-0" />
             <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
@@ -376,7 +374,7 @@ export default function Profile(){
             const Icon = item.icon
             return (
               <div key={idx} className="border border-gray-200 rounded-lg p-4 flex items-start gap-3">
-                <Icon size={24} className="text-teal-600 flex-shrink-0" />
+                <Icon size={24} className="text-teal-600 shrink-0" />
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-900">{item.title}</h4>
                   <p className="text-sm text-gray-600 mb-3">{item.description}</p>

@@ -5,7 +5,7 @@ import cp from '../../assets/cp.png'
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
+    <div className="min-h-screen bg-linear-to-b from-emerald-50 via-white to-white">
       <Navbar />
 
       {/* Hero Section - Mobile First */}

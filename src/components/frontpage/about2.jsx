@@ -6,7 +6,7 @@ const About2 = () => {
     <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24" id="contact">
       <div className="max-w-4xl mx-auto">
         {/* CTA Card - Responsive padding and layout */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20 shadow-2xl">
+        <div className="relative overflow-hidden bg-linear-to-r from-emerald-500 to-emerald-600 rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20 shadow-2xl">
           {/* Decorative background elements */}
           <div className="absolute top-0 right-0 w-40 sm:w-56 h-40 sm:h-56 bg-emerald-400 rounded-full opacity-10 -mr-20 -mt-20"></div>
           <div className="absolute bottom-0 left-0 w-32 sm:w-48 h-32 sm:h-48 bg-emerald-700 rounded-full opacity-5 -ml-16 -mb-16"></div>

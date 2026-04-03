@@ -781,6 +781,7 @@ input:checked + .slider:before {
     justify-content: center;
   }
 }
+
 .loading-overlay {
   position: fixed;
   top: 0;

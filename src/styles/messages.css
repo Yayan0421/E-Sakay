@@ -65,13 +65,13 @@
   .messages-page-wrapper {
     margin-left: 0 !important;
     padding: 1rem;
-    min-height: auto;
+    min-height: 1px;
   }
 
   .messages-page {
     margin-left: 0 !important;
     padding: 1rem;
-    min-height: auto;
+    min-height: 1px;
   }
 
   .messages-main-title {

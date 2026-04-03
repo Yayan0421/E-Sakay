@@ -95,7 +95,7 @@ export default function BookingPage() {
       </div>
 
       {/* Map Placeholder */}
-      <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl h-48 md:h-64 mb-4 flex items-center justify-center border-2 border-dashed border-teal-200">
+      <div className="bg-linear-to-br from-teal-50 to-cyan-50 rounded-2xl h-48 md:h-64 mb-4 flex items-center justify-center border-2 border-dashed border-teal-200">
         <div className="text-center">
           <MapPin size={48} className="text-teal-400 mx-auto mb-2" />
           <p className="text-sm text-gray-600">Map Integration</p>
@@ -132,7 +132,7 @@ export default function BookingPage() {
           disabled={!pickupLocation || !dropoffLocation || !selectedRide}
           className={`w-full py-3 rounded-xl font-bold text-white transition-all duration-200 ${
             pickupLocation && dropoffLocation && selectedRide
-              ? 'bg-gradient-to-r from-teal-500 to-cyan-500 hover:shadow-lg active:scale-95'
+              ? 'bg-linear-to-r from-teal-500 to-cyan-500 hover:shadow-lg active:scale-95'
               : 'bg-gray-300 cursor-not-allowed'
           }`}
         >

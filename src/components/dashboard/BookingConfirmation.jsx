@@ -85,7 +85,7 @@ export default function BookingConfirmation({
       {/* Ride Summary Card */}
       <div className="bg-white rounded-2xl shadow-md p-4 mb-4">
         {/* Ride Type Banner */}
-        <div className={`bg-gradient-to-r ${selectedRide.color} rounded-xl p-4 mb-4 text-white`}>
+        <div className={`bg-linear-to-r ${selectedRide.color} rounded-xl p-4 mb-4 text-white`}>
           <div className="text-5xl mb-2">{selectedRide.icon}</div>
           <h2 className="text-2xl font-bold">{selectedRide.name}</h2>
           <p className="text-white text-opacity-90">{selectedRide.description}</p>
@@ -95,7 +95,7 @@ export default function BookingConfirmation({
         <div className="space-y-3 mb-4">
           {/* Pickup */}
           <div className="flex gap-3">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
                 <MapPin size={16} className="text-teal-600" />
               </div>
@@ -115,7 +115,7 @@ export default function BookingConfirmation({
 
           {/* Dropoff */}
           <div className="flex gap-3">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
                 <MapPin size={16} className="text-red-600" />
               </div>
@@ -167,7 +167,7 @@ export default function BookingConfirmation({
 
         {/* Info Alert */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex gap-2 text-xs">
-          <AlertCircle size={16} className="text-blue-600 flex-shrink-0 mt-0.5" />
+          <AlertCircle size={16} className="text-blue-600 shrink-0 mt-0.5" />
           <p className="text-blue-900">
             Final fare may vary based on actual distance and traffic conditions.
           </p>
@@ -175,7 +175,7 @@ export default function BookingConfirmation({
       </div>
 
       {/* Driver Info Placeholder */}
-      <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 mb-4">
+      <div className="bg-linear-to-r from-gray-50 to-gray-100 rounded-2xl p-4 mb-4">
         <p className="text-xs text-gray-600 mb-3 font-semibold">Driver Will Be Assigned</p>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
@@ -196,7 +196,7 @@ export default function BookingConfirmation({
           className={`w-full py-3 rounded-xl font-bold text-white transition-all duration-200 ${
             isBooking
               ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-teal-500 to-cyan-500 hover:shadow-lg active:scale-95'
+              : 'bg-linear-to-r from-teal-500 to-cyan-500 hover:shadow-lg active:scale-95'
           }`}
         >
           {isBooking ? 'Booking...' : 'Confirm Booking'}

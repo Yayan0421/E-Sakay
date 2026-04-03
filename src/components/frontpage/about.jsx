@@ -20,7 +20,7 @@ const About = () => {
 				{/* Features Grid - Responsive: 1 col mobile, 2 col tablet, 3 col desktop */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
 					{/* Feature Card 1 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 rounded-2xl hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-emerald-50 to-white border border-emerald-100 rounded-2xl hover:shadow-lg hover:border-emerald-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">⚡</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">100% Electric Fleet</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">
@@ -29,7 +29,7 @@ const About = () => {
 					</div>
 
 					{/* Feature Card 2 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl hover:shadow-lg hover:border-blue-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-blue-50 to-white border border-blue-100 rounded-2xl hover:shadow-lg hover:border-blue-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">📍</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Real-Time Tracking</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">
@@ -38,7 +38,7 @@ const About = () => {
 					</div>
 
 					{/* Feature Card 3 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-2xl hover:shadow-lg hover:border-purple-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-purple-50 to-white border border-purple-100 rounded-2xl hover:shadow-lg hover:border-purple-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">🔒</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Safe & Verified Drivers</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">
@@ -47,7 +47,7 @@ const About = () => {
 					</div>
 
 					{/* Feature Card 4 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-yellow-50 to-white border border-yellow-100 rounded-2xl hover:shadow-lg hover:border-yellow-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-yellow-50 to-white border border-yellow-100 rounded-2xl hover:shadow-lg hover:border-yellow-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">💳</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Affordable Fares</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">
@@ -56,7 +56,7 @@ const About = () => {
 					</div>
 
 					{/* Feature Card 5 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-orange-50 to-white border border-orange-100 rounded-2xl hover:shadow-lg hover:border-orange-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-orange-50 to-white border border-orange-100 rounded-2xl hover:shadow-lg hover:border-orange-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">⏰</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Available 24/7</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">
@@ -65,7 +65,7 @@ const About = () => {
 					</div>
 
 					{/* Feature Card 6 */}
-					<div className="group p-6 sm:p-8 bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-2xl hover:shadow-lg hover:border-green-300 transition-all duration-300">
+					<div className="group p-6 sm:p-8 bg-linear-to-br from-green-50 to-white border border-green-100 rounded-2xl hover:shadow-lg hover:border-green-300 transition-all duration-300">
 						<div className="text-4xl sm:text-5xl mb-4">🌿</div>
 						<h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">Eco-Friendly</h4>
 						<p className="text-sm sm:text-base text-gray-600 leading-relaxed">

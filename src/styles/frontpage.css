@@ -90,6 +90,7 @@ html { scroll-behavior: smooth; }
 	font-weight: 600;
 	margin-bottom: 24px;
 	font-size: 13px;
+	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -223,6 +224,7 @@ html { scroll-behavior: smooth; }
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 }
 .btn-secondary:hover {

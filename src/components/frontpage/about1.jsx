@@ -2,7 +2,7 @@ import React from 'react'
 
 const About1 = () => {
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-gray-50" id="how-it-works">
+    <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 bg-linear-to-b from-white to-gray-50" id="how-it-works">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
@@ -21,7 +21,7 @@ const About1 = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Step 1 */}
           <div className="flex flex-col items-center text-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-blue-100 to-blue-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
               📱
             </div>
             <div className="inline-block px-3 py-1 bg-gray-200 rounded-full mb-3 text-xs sm:text-sm font-bold text-gray-700">
@@ -35,7 +35,7 @@ const About1 = () => {
 
           {/* Step 2 */}
           <div className="flex flex-col items-center text-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-emerald-100 to-emerald-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
               🚲
             </div>
             <div className="inline-block px-3 py-1 bg-gray-200 rounded-full mb-3 text-xs sm:text-sm font-bold text-gray-700">
@@ -49,7 +49,7 @@ const About1 = () => {
 
           {/* Step 3 */}
           <div className="flex flex-col items-center text-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-purple-100 to-purple-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
               📍
             </div>
             <div className="inline-block px-3 py-1 bg-gray-200 rounded-full mb-3 text-xs sm:text-sm font-bold text-gray-700">
@@ -63,7 +63,7 @@ const About1 = () => {
 
           {/* Step 4 */}
           <div className="flex flex-col items-center text-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-yellow-100 to-yellow-50 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl mb-4 sm:mb-6 shadow-md">
               ✅
             </div>
             <div className="inline-block px-3 py-1 bg-gray-200 rounded-full mb-3 text-xs sm:text-sm font-bold text-gray-700">

@@ -48,7 +48,7 @@
   color: #0f172a;
   margin-left: 0;
   transition: margin-left 180ms ease;
-  min-height: auto;
+  min-height: 1px;
 }
 
 .rides-page.sidebar-collapsed {
