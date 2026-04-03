@@ -386,6 +386,19 @@ html { scroll-behavior: smooth; }
 	.step-card::after{ display:none }
 }
 
+/* Mobile-first responsive sizing for How It Works section (Tailwind components) */
+@media (max-width: 767px) {
+	#how-it-works {
+		box-sizing: border-box;
+		overflow-x: hidden;
+	}
+	
+	#how-it-works > div {
+		box-sizing: border-box;
+		width: 100%;
+	}
+}
+
 /* Footer styles */
 .site-footer{ background:#0f1720; color:#cbd5db; padding:36px 20px; margin-top:56px }
 .footer-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px }

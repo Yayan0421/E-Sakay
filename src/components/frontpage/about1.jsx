@@ -2,7 +2,7 @@ import React from 'react'
 
 const About1 = () => {
   return (
-    <section className="w-full px-3 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20 bg-linear-to-b from-white to-gray-50 flex justify-center" id="how-it-works">
+    <section className="w-full px-3 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20 bg-linear-to-b from-white to-gray-50" id="how-it-works">
       <div className="max-w-6xl mx-auto w-full">
         {/* Section Header - Optimized for mobile */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
@@ -18,7 +18,7 @@ const About1 = () => {
         </div>
 
         {/* Steps Grid - Responsive: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mx-auto w-full">
           {/* Step 1 */}
           <div className="flex flex-col items-center text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-linear-to-br from-blue-100 to-blue-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 md:mb-5 shadow-sm">
